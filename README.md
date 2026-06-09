@@ -1,8 +1,10 @@
 # EventHub
 
+**Live Demo:** [https://event-hub-beryl.vercel.app/](https://event-hub-beryl.vercel.app/)
+
 EventHub is a modern, real-time event and media management platform designed to help communities, clubs, and groups seamlessly organize events, share media, and interact with each other. 
 
-With a stunning, high-performance "Aurora Borealis" user interface, EventHub provides a premium experience for managing both public and private events.
+With a stunning, high-performance user interface, EventHub provides a premium experience for managing both public and private events.
 
 ## 🚀 Features
 
@@ -12,8 +14,9 @@ With a stunning, high-performance "Aurora Borealis" user interface, EventHub pro
 - **Real-Time Interactions:** Like and comment on media instantly, powered by WebSockets.
 - **Live Notifications:** Receive real-time toast notifications for join requests, approvals, likes, and comments.
 - **Role-Based Access Control:** Differentiate between Event Creators (Admins) and regular Members (Viewers).
+- **AI-Based Image Tagging:** Utilizes Microsoft Azure cognitive services to automatically analyze and tag uploaded media.
 - **Secure Media Downloads:** Dynamically generated, server-side watermarks are automatically applied to downloaded images to protect content ownership.
-- **Premium UI:** Designed with a vibrant, dynamic "Aurora Borealis" theme featuring glassmorphism, glowing accents, and smooth micro-animations.
+- **Premium UI:** Designed with a vibrant, dynamic theme featuring glassmorphism, glowing accents, and smooth micro-animations.
 
 ## 🛠 Tech Stack
 
@@ -29,15 +32,17 @@ With a stunning, high-performance "Aurora Borealis" user interface, EventHub pro
 - **MongoDB & Mongoose** for flexible NoSQL data modeling
 - **Socket.io** for real-time, bi-directional communication
 - **Sharp** for high-performance image processing and watermarking
+- **Microsoft Azure** for scalable cloud-based image and media storing
 - **JWT & bcryptjs** for authentication and security
 
 ## 🧠 Thought Process & Architecture
 
 When designing EventHub, the primary goal was to create a highly engaging, real-time platform that feels alive.
 
-1. **Visual Excellence:** I prioritized a striking aesthetic. By migrating to the unique "Aurora Borealis" color palette (deep space blues, electric violets, and vibrant cyans), the platform instantly distinguishes itself from generic dashboards.
+1. **Visual Excellence:** I prioritized a striking aesthetic. By migrating to a unique, modern color palette (deep space blues, electric violets, and vibrant cyans), the platform instantly distinguishes itself from generic dashboards.
 2. **Real-Time First:** Because event interaction is inherently social, I integrated Socket.io from the ground up. This ensures that when a user comments on a photo or requests to join an event, the recipient is notified instantly without needing to refresh the page.
 3. **Data Privacy & Security:** I implemented a strict access control layer. Private events require approval to view, and media downloads are dynamically intercepted by the backend (`sharp`) to permanently overlay an "EVENTHUB" watermark, ensuring that photos shared off-platform retain their branding and protection.
+4. **Cloud Infrastructure & AI Integration:** To handle high-volume media uploads reliably, the system utilizes **Microsoft Azure** for robust cloud-based image and media storing. The architecture is also deeply integrated with Azure's cognitive services for AI-based image tagging and analysis, ensuring the platform remains highly scalable and intelligent.
 
 ## ⚠️ Known Limitations
 
