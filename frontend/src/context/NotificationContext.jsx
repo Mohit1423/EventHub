@@ -109,16 +109,16 @@ export const NotificationProvider = ({ children }) => {
       {children}
 
       {toast && (
-        <div className="fixed bottom-5 right-5 z-50 animate-bounce glass-panel p-4 rounded-xl flex items-center gap-3 border-rose-500/50 shadow-2xl max-w-sm">
+        <div className="fixed bottom-5 right-5 z-50 animate-bounce glass-panel p-4 rounded-xl flex items-center gap-3 border-cyan-500/50 shadow-2xl max-w-sm">
           <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 overflow-hidden flex-shrink-0 flex items-center justify-center">
             {toast.senderPicture ? (
               <img src={toast.senderPicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${toast.senderPicture}` : toast.senderPicture} alt="" className="w-full h-full object-cover" />
             ) : (
-              <span className="text-rose-500 font-bold text-lg">{toast.senderName.charAt(0)}</span>
+              <span className="text-cyan-500 font-bold text-lg">{toast.senderName.charAt(0)}</span>
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="text-xs text-rose-500 font-bold tracking-wide uppercase">New Notification</h4>
+            <h4 className="text-xs text-cyan-500 font-bold tracking-wide uppercase">New Notification</h4>
             <p className="text-sm text-slate-100 font-medium truncate">{toast.message}</p>
           </div>
           <button 

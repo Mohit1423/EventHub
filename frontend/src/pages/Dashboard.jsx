@@ -153,7 +153,7 @@ const Dashboard = () => {
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="self-start md:self-auto px-5 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-bold text-sm shadow-lg shadow-rose-600/10 flex items-center gap-2 transition-all hover:scale-[1.02]"
+            className="self-start md:self-auto px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-bold text-sm shadow-lg shadow-cyan-600/10 flex items-center gap-2 transition-all hover:scale-[1.02]"
           >
             <Plus className="w-5 h-5" />
             Create Event
@@ -178,19 +178,19 @@ const Dashboard = () => {
               <span className="uppercase tracking-wider mr-1">Sort By:</span>
               <button 
                 onClick={() => handleSort('name')} 
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg border transition-all ${sortBy === 'name' ? 'border-rose-500/30 text-rose-400 bg-rose-500/5' : 'border-slate-800 hover:border-slate-700'}`}
+                className={`flex items-center gap-1 px-3 py-2 rounded-lg border transition-all ${sortBy === 'name' ? 'border-cyan-500/30 text-cyan-400 bg-cyan-500/5' : 'border-slate-800 hover:border-slate-700'}`}
               >
                 Name <ArrowUpDown className="w-3.5 h-3.5" />
               </button>
               <button 
                 onClick={() => handleSort('date')} 
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg border transition-all ${sortBy === 'date' ? 'border-rose-500/30 text-rose-400 bg-rose-500/5' : 'border-slate-800 hover:border-slate-700'}`}
+                className={`flex items-center gap-1 px-3 py-2 rounded-lg border transition-all ${sortBy === 'date' ? 'border-cyan-500/30 text-cyan-400 bg-cyan-500/5' : 'border-slate-800 hover:border-slate-700'}`}
               >
                 Date <ArrowUpDown className="w-3.5 h-3.5" />
               </button>
               <button 
                 onClick={() => handleSort('category')} 
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg border transition-all ${sortBy === 'category' ? 'border-rose-500/30 text-rose-400 bg-rose-500/5' : 'border-slate-800 hover:border-slate-700'}`}
+                className={`flex items-center gap-1 px-3 py-2 rounded-lg border transition-all ${sortBy === 'category' ? 'border-cyan-500/30 text-cyan-400 bg-cyan-500/5' : 'border-slate-800 hover:border-slate-700'}`}
               >
                 Category <ArrowUpDown className="w-3.5 h-3.5" />
               </button>
@@ -203,7 +203,7 @@ const Dashboard = () => {
               <button
                 key={cat}
                 onClick={() => setCategoryFilter(cat)}
-                className={`px-4 py-1.5 rounded-full text-xs font-medium border transition-all ${categoryFilter === cat ? 'bg-rose-600 border-rose-500 text-white font-semibold' : 'bg-slate-900/40 border-slate-800/80 text-slate-400 hover:text-slate-200 hover:border-slate-700'}`}
+                className={`px-4 py-1.5 rounded-full text-xs font-medium border transition-all ${categoryFilter === cat ? 'bg-cyan-600 border-cyan-500 text-white font-semibold' : 'bg-slate-900/40 border-slate-800/80 text-slate-400 hover:text-slate-200 hover:border-slate-700'}`}
               >
                 {cat}
               </button>
@@ -213,7 +213,7 @@ const Dashboard = () => {
 
         {loading ? (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-rose-500"></div>
+            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-cyan-500"></div>
           </div>
         ) : filteredEvents.length === 0 ? (
           <div className="glass-panel text-center py-16 rounded-3xl border-slate-900">
@@ -235,18 +235,18 @@ const Dashboard = () => {
               return (
                 <div key={event._id} className="glass-card flex flex-col justify-between p-6 rounded-2xl relative group border-slate-900 overflow-hidden">
 
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
                   <div className="relative">
                     
                     <div className="flex items-center justify-between mb-4">
                       <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                        <Tag className="w-3.5 h-3.5 text-rose-500" />
+                        <Tag className="w-3.5 h-3.5 text-cyan-500" />
                         {event.category}
                       </span>
                     </div>
 
-                    <h3 className="text-lg font-bold text-slate-100 group-hover:text-rose-500 transition-colors line-clamp-1">
+                    <h3 className="text-lg font-bold text-slate-100 group-hover:text-cyan-500 transition-colors line-clamp-1">
                       {event.name}
                     </h3>
                     <p className="text-slate-400 text-xs mt-1.5 h-10 line-clamp-2 leading-relaxed">
@@ -268,7 +268,7 @@ const Dashboard = () => {
                   <div className="mt-6 relative">
                     <button
                       onClick={() => navigate(`/events/${event._id}`)}
-                      className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-850 text-rose-500 border border-slate-800/80 hover:border-rose-500/20 text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all"
+                      className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-850 text-cyan-500 border border-slate-800/80 hover:border-cyan-500/20 text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all"
                     >
                       Open Album <ExternalLink className="w-4 h-4" />
                       {event.isMember && (
@@ -298,7 +298,7 @@ const Dashboard = () => {
             </p>
 
             {createError && (
-              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold mb-4">
+              <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold mb-4">
                 {createError}
               </div>
             )}
@@ -363,7 +363,7 @@ const Dashboard = () => {
                 </button>
                 <button 
                   type="submit"
-                  className="px-4 py-2.5 text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white rounded-lg shadow-lg disabled:opacity-50"
+                  className="px-4 py-2.5 text-xs font-bold bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg shadow-lg disabled:opacity-50"
                   disabled={creating}
                 >
                   {creating ? 'Creating...' : 'Create Album'}

@@ -17,7 +17,7 @@ const Notifications = () => {
   const getNotificationStyle = (type) => {
     switch (type) {
       case 'LIKE':
-        return { icon: <Heart className="w-5 h-5 text-rose-500 fill-rose-500/20" />, bg: 'bg-rose-500/5 border-rose-500/10' };
+        return { icon: <Heart className="w-5 h-5 text-cyan-500 fill-cyan-500/20" />, bg: 'bg-cyan-500/5 border-cyan-500/10' };
       case 'COMMENT':
         return { icon: <MessageSquare className="w-5 h-5 text-sky-400" />, bg: 'bg-sky-400/5 border-sky-400/10' };
       case 'TAG':
@@ -27,7 +27,7 @@ const Notifications = () => {
       case 'JOIN_APPROVED':
         return { icon: <CheckCircle2 className="w-5 h-5 text-emerald-400" />, bg: 'bg-emerald-400/5 border-emerald-400/10' };
       case 'JOIN_DENIED':
-        return { icon: <XCircle className="w-5 h-5 text-rose-400" />, bg: 'bg-rose-400/5 border-rose-400/10' };
+        return { icon: <XCircle className="w-5 h-5 text-cyan-400" />, bg: 'bg-cyan-400/5 border-cyan-400/10' };
       default:
         return { icon: <Bell className="w-5 h-5 text-slate-400" />, bg: 'bg-slate-800/10 border-slate-800/20' };
     }
@@ -63,7 +63,7 @@ const Notifications = () => {
 
         <div className="mb-8">
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-100 flex items-center gap-2">
-            <Bell className="text-rose-500 w-8 h-8" />
+            <Bell className="text-cyan-500 w-8 h-8" />
             Notifications Center
           </h1>
           <p className="text-sm text-slate-400 mt-1">
@@ -97,7 +97,7 @@ const Notifications = () => {
                 <div 
                   key={notification._id}
                   onClick={() => handleNotificationClick(notification)}
-                  className={`glass-card p-4 rounded-xl flex items-center justify-between border cursor-pointer group hover:bg-slate-900/60 transition-all ${bg} ${isUnread ? 'border-rose-500/20 bg-slate-900/80 shadow-md' : 'border-slate-900 bg-slate-900/20'}`}
+                  className={`glass-card p-4 rounded-xl flex items-center justify-between border cursor-pointer group hover:bg-slate-900/60 transition-all ${bg} ${isUnread ? 'border-cyan-500/20 bg-slate-900/80 shadow-md' : 'border-slate-900 bg-slate-900/20'}`}
                 >
                   <div className="flex items-center gap-4 min-w-0">
 
@@ -131,7 +131,7 @@ const Notifications = () => {
 
                   <div className="flex items-center gap-2">
                     {isUnread && (
-                      <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-cyan-500" />
                     )}
                     <ChevronRight className="w-5 h-5 text-slate-600 group-hover:text-slate-400 group-hover:translate-x-0.5 transition-all" />
                   </div>

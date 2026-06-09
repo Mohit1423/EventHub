@@ -51,10 +51,10 @@ const Navbar = () => {
       <nav className="sticky top-0 z-40 glass-panel bg-slate-950/80 border-b border-slate-900 px-6 py-4 flex items-center justify-between">
         
         <Link to="/dashboard" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-105 transition-all">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-violet-600 flex items-center justify-center shadow-lg group-hover:scale-105 transition-all">
             <Camera className="text-white w-5 h-5" />
           </div>
-          <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-rose-400 bg-clip-text text-transparent">
+          <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-cyan-400 bg-clip-text text-transparent">
             EventHub
           </span>
         </Link>
@@ -62,7 +62,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-8 font-medium">
           <Link 
             to="/dashboard" 
-            className={`transition-colors text-sm tracking-wide ${isActive('/dashboard') ? 'text-rose-500 font-bold' : 'text-slate-400 hover:text-slate-200'}`}
+            className={`transition-colors text-sm tracking-wide ${isActive('/dashboard') ? 'text-cyan-500 font-bold' : 'text-slate-400 hover:text-slate-200'}`}
           >
             Events Directory
           </Link>
@@ -72,11 +72,11 @@ const Navbar = () => {
           
           <Link 
             to="/notifications" 
-            className={`relative p-2 rounded-xl border border-slate-800 bg-slate-900/40 text-slate-400 hover:text-slate-200 hover:border-slate-700 transition-all ${isActive('/notifications') ? 'text-rose-500 border-rose-500/30' : ''}`}
+            className={`relative p-2 rounded-xl border border-slate-800 bg-slate-900/40 text-slate-400 hover:text-slate-200 hover:border-slate-700 transition-all ${isActive('/notifications') ? 'text-cyan-500 border-cyan-500/30' : ''}`}
           >
             <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-rose-500 text-white font-extrabold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border border-slate-950 animate-pulse">
+              <span className="absolute -top-1 -right-1 bg-cyan-500 text-white font-extrabold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border border-slate-950 animate-pulse">
                 {unreadCount}
               </span>
             )}
@@ -90,7 +90,7 @@ const Navbar = () => {
               {user?.profilePicture ? (
                 <img src={user.profilePicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${user.profilePicture}` : user.profilePicture} alt="" className="w-full h-full object-cover" />
               ) : (
-                <User className="w-4 h-4 text-rose-500" />
+                <User className="w-4 h-4 text-cyan-500" />
               )}
             </div>
             <div className="hidden sm:block">
@@ -101,7 +101,7 @@ const Navbar = () => {
 
           <button 
             onClick={logout}
-            className="p-2 rounded-xl border border-slate-800/80 hover:border-rose-500/20 text-slate-400 hover:text-rose-500 hover:bg-rose-500/5 transition-all"
+            className="p-2 rounded-xl border border-slate-800/80 hover:border-cyan-500/20 text-slate-400 hover:text-cyan-500 hover:bg-cyan-500/5 transition-all"
             title="Log Out"
           >
             <LogOut className="w-5 h-5" />
@@ -113,14 +113,14 @@ const Navbar = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" onClick={() => setIsProfileOpen(false)}>
           <div className="w-full max-w-md glass-panel p-6 rounded-2xl relative shadow-2xl animate-fade-in border-slate-800" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-xl font-bold text-slate-100 mb-1 flex items-center gap-2">
-              <User className="text-rose-500" /> My Profile Setup
+              <User className="text-cyan-500" /> My Profile Setup
             </h2>
             <p className="text-slate-400 text-xs mb-5">
               Set up your profile picture, bio, and face recognition reference image.
             </p>
 
             {statusMessage && (
-              <div className={`p-3 rounded-xl flex items-center gap-2 text-xs font-medium mb-4 ${statusMessage.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`}>
+              <div className={`p-3 rounded-xl flex items-center gap-2 text-xs font-medium mb-4 ${statusMessage.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'}`}>
                 {statusMessage.type === 'success' ? <CheckCircle className="w-4 h-4 flex-shrink-0" /> : <AlertTriangle className="w-4 h-4 flex-shrink-0" />}
                 <span>{statusMessage.text}</span>
               </div>
@@ -174,7 +174,7 @@ const Navbar = () => {
                 </button>
                 <button 
                   type="submit"
-                  className="px-4 py-2 text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white rounded-lg shadow-lg flex items-center gap-1 disabled:opacity-50"
+                  className="px-4 py-2 text-xs font-bold bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg shadow-lg flex items-center gap-1 disabled:opacity-50"
                   disabled={updating}
                 >
                   {updating ? 'Saving...' : 'Save Profile'}

@@ -35,11 +35,11 @@ const Login = () => {
       </Link>
       <div className="w-full max-w-md glass-panel p-8 rounded-3xl relative shadow-2xl border-slate-900 z-10">
 
-        <div className="absolute -top-10 -left-10 w-40 h-40 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-10 -left-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center shadow-[0_0_40px_rgba(244,63,94,0.3)] mb-4 hover:scale-110 transition-transform duration-300">
+          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-cyan-500 to-violet-600 flex items-center justify-center shadow-[0_0_40px_rgba(244,63,94,0.3)] mb-4 hover:scale-110 transition-transform duration-300">
             <LogIn className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-extrabold tracking-tight text-slate-100">
@@ -51,7 +51,7 @@ const Login = () => {
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold flex items-center gap-2 mb-5">
+          <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold flex items-center gap-2 mb-5">
             <ShieldAlert className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
@@ -94,7 +94,7 @@ const Login = () => {
 
           <button 
             type="submit"
-            className="w-full py-3.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm rounded-xl transition-all shadow-lg hover:shadow-rose-600/10 disabled:opacity-50"
+            className="w-full py-3.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm rounded-xl transition-all shadow-lg hover:shadow-cyan-600/10 disabled:opacity-50"
             disabled={loading}
           >
             {loading ? 'Authenticating...' : 'Sign In'}
@@ -103,7 +103,7 @@ const Login = () => {
 
         <div className="text-center mt-6 text-xs text-slate-500">
           New here?{' '}
-          <Link to="/register" className="text-rose-400 hover:text-rose-300 font-bold ml-0.5">
+          <Link to="/register" className="text-cyan-400 hover:text-rose-300 font-bold ml-0.5">
             Create an account
           </Link>
         </div>

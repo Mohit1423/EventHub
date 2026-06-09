@@ -40,7 +40,7 @@ export const applyWatermark = async (fileBuffer, { clubName = 'Club', eventName 
         <!-- Bottom branding bar -->
         <rect x="0" y="${height - Math.round(height * 0.06)}" width="${width}" height="${Math.round(height * 0.06)}" class="bar-bg" />
         <text x="${width / 2}" y="${height - Math.round(height * 0.022)}" text-anchor="middle" class="bar-text">
-          PROTECTED BY ANTIGRAVITY PLATFORM | ${text}
+          EVENTHUB | ${text}
         </text>
       </svg>
     `;

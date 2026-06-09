@@ -31,11 +31,11 @@
 }
 
 .glass-card {
-  @apply bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 shadow-md hover:border-rose-500/30 hover:bg-slate-900/60 transition-all duration-300;
+  @apply bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 shadow-md hover:border-cyan-500/30 hover:bg-slate-900/60 transition-all duration-300;
 }
 
 .glass-input {
-  @apply bg-slate-950/50 border border-slate-800 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 focus:outline-none rounded-lg text-slate-100 bg-none transition-all;
+  @apply bg-slate-950/50 border border-slate-800 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none rounded-lg text-slate-100 bg-none transition-all;
 }
 
 /* Micro-animations */

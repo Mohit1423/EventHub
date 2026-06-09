@@ -16,18 +16,18 @@ const Landing = () => {
   if (loading) return null;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans selection:bg-rose-500/30">
+    <div className="min-h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans selection:bg-cyan-500/30">
 
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-rose-600/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-indigo-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-50" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-violet-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-50" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay"></div>
       </div>
 
       <nav className="relative z-10 border-b border-slate-800/50 glass-panel">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-rose-500/20">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-violet-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
               <Camera className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
@@ -48,13 +48,13 @@ const Landing = () => {
       <main className="relative z-10 pt-20 pb-32 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 mb-8 animate-fade-in opacity-0" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
-            <Sparkles className="w-4 h-4 text-rose-400" />
+            <Sparkles className="w-4 h-4 text-cyan-400" />
             <span className="text-xs font-bold text-slate-300 tracking-wide uppercase">AI-Powered Memory Hub</span>
           </div>
           
           <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[1.1] mb-8 animate-fade-in opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
             Collect & Relive <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-cyan-300 to-violet-500">
               Every Shared Moment
             </span>
           </h1>
@@ -64,7 +64,7 @@ const Landing = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
-            <Link to="/register" className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-rose-500 to-indigo-600 rounded-full font-bold text-white flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-[0_0_40px_rgba(244,63,94,0.3)] hover:scale-105 duration-200">
+            <Link to="/register" className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-cyan-500 to-violet-600 rounded-full font-bold text-white flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-[0_0_40px_rgba(244,63,94,0.3)] hover:scale-105 duration-200">
               Start Your First Event
               <ArrowRight className="w-5 h-5" />
             </Link>
@@ -105,8 +105,8 @@ const Landing = () => {
           </div>
 
           <div className="absolute top-12 left-[10%] z-30 p-4 rounded-2xl glass-panel border border-slate-700 shadow-xl flex items-center gap-4 hover:-translate-y-2 transition-transform duration-300">
-            <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center">
-              <Users className="w-6 h-6 text-indigo-400" />
+            <div className="w-12 h-12 rounded-full bg-violet-500/20 flex items-center justify-center">
+              <Users className="w-6 h-6 text-violet-400" />
             </div>
             <div>
               <div className="text-sm font-bold text-white">42 Members</div>
@@ -115,8 +115,8 @@ const Landing = () => {
           </div>
 
           <div className="absolute top-40 right-[10%] z-30 p-4 rounded-2xl glass-panel border border-slate-700 shadow-xl flex items-center gap-4 hover:-translate-y-2 transition-transform duration-300">
-            <div className="w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center">
-              <ImageIcon className="w-6 h-6 text-rose-400" />
+            <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
+              <ImageIcon className="w-6 h-6 text-cyan-400" />
             </div>
             <div>
               <div className="text-sm font-bold text-white">+ 1,204 Photos</div>
@@ -135,12 +135,12 @@ const Landing = () => {
 
           <div className="grid md:grid-cols-3 gap-8">
             <FeatureCard 
-              icon={<Sparkles className="w-8 h-8 text-rose-400" />}
+              icon={<Sparkles className="w-8 h-8 text-cyan-400" />}
               title="Azure AI Auto-Tagging"
               desc="Our integration with Azure Vision automatically detects objects, themes, and activities in your photos to make them instantly searchable."
             />
             <FeatureCard 
-              icon={<Users className="w-8 h-8 text-indigo-400" />}
+              icon={<Users className="w-8 h-8 text-violet-400" />}
               title="Collaborative Albums"
               desc="Generate unique invite links. Anyone with the link can join the event, view the public feed, and bulk upload their own photos."
             />
@@ -162,7 +162,7 @@ const Landing = () => {
           
           <div className="grid md:grid-cols-3 gap-12 relative">
             
-            <div className="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-transparent via-rose-500/50 to-transparent"></div>
+            <div className="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
             
             <StepCard number="1" title="Create an Event" desc="Give your event a name and generate a secure sharing link." />
             <StepCard number="2" title="Invite Friends" desc="Send the link to your guests. They can upload photos instantly without an account." />
@@ -172,7 +172,7 @@ const Landing = () => {
       </section>
 
       <section className="relative z-10 py-32 bg-slate-950 border-t border-slate-900 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-600/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-violet-600/5 rounded-full blur-3xl pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-6">Loved by Thousands</h2>
@@ -188,7 +188,7 @@ const Landing = () => {
 
       <section className="relative z-10 py-32 bg-slate-900 border-t border-slate-800">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-5xl font-black tracking-tight mb-8">Ready to Capture <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-indigo-500">Your Next Event?</span></h2>
+          <h2 className="text-5xl font-black tracking-tight mb-8">Ready to Capture <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-500">Your Next Event?</span></h2>
           <p className="text-xl text-slate-400 mb-10">Join thousands of users who trust EventHub to store and organize their most precious memories.</p>
           <Link to="/register" className="inline-flex items-center gap-2 px-10 py-5 bg-white text-slate-950 rounded-full font-bold text-lg hover:scale-105 transition-transform duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)]">
             Create Your Free Account
@@ -202,7 +202,7 @@ const Landing = () => {
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-2">
               <div className="flex items-center gap-2 mb-6">
-                <Camera className="w-6 h-6 text-rose-500" />
+                <Camera className="w-6 h-6 text-cyan-500" />
                 <span className="font-extrabold text-2xl tracking-tight">EventHub</span>
               </div>
               <p className="text-slate-400 max-w-sm mb-6">The ultimate AI-powered memory hub for weddings, parties, and corporate events.</p>
@@ -210,17 +210,17 @@ const Landing = () => {
             <div>
               <h4 className="font-bold text-white mb-6">Product</h4>
               <ul className="space-y-4 text-slate-400">
-                <li><a href="#" className="hover:text-rose-400 transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-rose-400 transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-rose-400 transition-colors">Security</a></li>
+                <li><a href="#" className="hover:text-cyan-400 transition-colors">Features</a></li>
+                <li><a href="#" className="hover:text-cyan-400 transition-colors">Pricing</a></li>
+                <li><a href="#" className="hover:text-cyan-400 transition-colors">Security</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold text-white mb-6">Legal</h4>
               <ul className="space-y-4 text-slate-400">
-                <li><a href="#" className="hover:text-rose-400 transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-rose-400 transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-rose-400 transition-colors">Contact</a></li>
+                <li><a href="#" className="hover:text-cyan-400 transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-cyan-400 transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-cyan-400 transition-colors">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -245,7 +245,7 @@ const FeatureCard = ({ icon, title, desc }) => (
 
 const StepCard = ({ number, title, desc }) => (
   <div className="relative text-center group">
-    <div className="w-20 h-20 mx-auto rounded-full bg-slate-950 border-2 border-rose-500 flex items-center justify-center mb-6 relative z-10 shadow-[0_0_30px_rgba(244,63,94,0.2)] group-hover:scale-110 transition-transform duration-300">
+    <div className="w-20 h-20 mx-auto rounded-full bg-slate-950 border-2 border-cyan-500 flex items-center justify-center mb-6 relative z-10 shadow-[0_0_30px_rgba(244,63,94,0.2)] group-hover:scale-110 transition-transform duration-300">
       <span className="text-3xl font-black text-white">{number}</span>
     </div>
     <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
@@ -255,7 +255,7 @@ const StepCard = ({ number, title, desc }) => (
 
 const TestimonialCard = ({ name, event, text }) => (
   <div className="p-8 rounded-3xl bg-slate-900/50 border border-slate-800 glass-panel hover:-translate-y-2 transition-transform duration-300">
-    <div className="flex gap-1 text-rose-500 mb-6">
+    <div className="flex gap-1 text-cyan-500 mb-6">
       <Star className="w-5 h-5 fill-current" />
       <Star className="w-5 h-5 fill-current" />
       <Star className="w-5 h-5 fill-current" />
@@ -264,7 +264,7 @@ const TestimonialCard = ({ name, event, text }) => (
     </div>
     <p className="text-slate-300 italic mb-6 leading-relaxed">"{text}"</p>
     <div className="flex items-center gap-3">
-      <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-rose-400">
+      <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-cyan-400">
         {name.charAt(0)}
       </div>
       <div>
