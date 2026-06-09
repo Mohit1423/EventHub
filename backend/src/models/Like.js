@@ -18,7 +18,6 @@ const likeSchema = new mongoose.Schema(
   }
 );
 
-// One like per user per media
 likeSchema.index({ mediaId: 1, userId: 1 }, { unique: true });
 
 const Like = mongoose.model('Like', likeSchema);

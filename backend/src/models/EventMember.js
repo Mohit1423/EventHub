@@ -23,7 +23,6 @@ const eventMemberSchema = new mongoose.Schema(
   }
 );
 
-// Compound index to ensure uniqueness of user membership per event
 eventMemberSchema.index({ eventId: 1, userId: 1 }, { unique: true });
 
 const EventMember = mongoose.model('EventMember', eventMemberSchema);

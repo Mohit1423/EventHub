@@ -1,17 +1,12 @@
 let ioInstance = null;
-const userSockets = new Map(); // Map of userId -> Set of socketIds
+const userSockets = new Map();
 
-/**
- * Initialize Socket.io integration
- * @param {Server} io Socket.io server instance
- */
 export const initSocket = (io) => {
   ioInstance = io;
 
   io.on('connection', (socket) => {
     console.log(`Socket connected: ${socket.id}`);
 
-    // Register user ID with socket ID upon authentication message
     socket.on('register', (userId) => {
       if (!userId) return;
       
@@ -37,7 +32,7 @@ export const initSocket = (io) => {
 
     socket.on('disconnect', () => {
       console.log(`Socket disconnected: ${socket.id}`);
-      // Clean up maps
+     
       for (const [userId, socketIds] of userSockets.entries()) {
         if (socketIds.has(socket.id)) {
           socketIds.delete(socket.id);
@@ -52,12 +47,6 @@ export const initSocket = (io) => {
   });
 };
 
-/**
- * Sends a real-time notification to a specific user if they are online
- * @param {string} userId Recipient user ID
- * @param {string} eventName Socket event (e.g. 'notification')
- * @param {Object} data Payload data
- */
 export const sendRealtimeNotification = (userId, eventName, data) => {
   if (!ioInstance) return;
 
@@ -74,12 +63,6 @@ export const sendRealtimeNotification = (userId, eventName, data) => {
   }
 };
 
-/**
- * Broadcasts an event to all users connected to a specific event room
- * @param {string} eventId The ID of the event room
- * @param {string} eventName Socket event name
- * @param {Object} data Payload data
- */
 export const broadcastToEvent = (eventId, eventName, data = {}) => {
   if (!ioInstance) return;
   ioInstance.to(`event_${eventId}`).emit(eventName, data);

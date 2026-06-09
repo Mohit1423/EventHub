@@ -9,9 +9,8 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [socket, setSocket] = useState(null);
-  const [toast, setToast] = useState(null); // Real-time notification toast overlay state
+  const [toast, setToast] = useState(null);
 
-  // 1. Fetch initial notifications from DB when user logs in
   useEffect(() => {
     const fetchNotifications = async () => {
       if (!user || !token) {
@@ -39,7 +38,6 @@ export const NotificationProvider = ({ children }) => {
     fetchNotifications();
   }, [user, token]);
 
-  // 2. Setup WebSocket client connection
   useEffect(() => {
     if (!user) {
       if (socket) {
@@ -60,12 +58,10 @@ export const NotificationProvider = ({ children }) => {
 
     newSocket.on('notification', (newNotification) => {
       console.log('Received real-time notification:', newNotification);
-      
-      // Prepend to list
+
       setNotifications(prev => [newNotification, ...prev]);
       setUnreadCount(prev => prev + 1);
 
-      // Trigger temporary toast overlay
       setToast({
         id: Date.now(),
         message: newNotification.message,
@@ -79,12 +75,11 @@ export const NotificationProvider = ({ children }) => {
     };
   }, [user]);
 
-  // Toast Auto-cleanup
   useEffect(() => {
     if (toast) {
       const timer = setTimeout(() => {
         setToast(null);
-      }, 5000); // Hide toast after 5 seconds
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [toast]);
@@ -112,8 +107,7 @@ export const NotificationProvider = ({ children }) => {
   return (
     <NotificationContext.Provider value={{ notifications, unreadCount, markAsRead, toast, setToast, socket }}>
       {children}
-      
-      {/* Toast Notification Alert Overlay */}
+
       {toast && (
         <div className="fixed bottom-5 right-5 z-50 animate-bounce glass-panel p-4 rounded-xl flex items-center gap-3 border-rose-500/50 shadow-2xl max-w-sm">
           <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 overflow-hidden flex-shrink-0 flex items-center justify-center">

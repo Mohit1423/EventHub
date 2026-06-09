@@ -4,17 +4,12 @@ import User from '../models/User.js';
 import Media from '../models/Media.js';
 import { uploadFile } from '../services/storageService.js';
 
-// Helper: Generate JWT Token
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
 };
 
-/**
- * Register a new user
- * POST /api/auth/register
- */
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -33,7 +28,6 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: 'User already exists with this name' });
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
@@ -57,10 +51,6 @@ export const registerUser = async (req, res) => {
   }
 };
 
-/**
- * Authenticate user & get token
- * POST /api/auth/login
- */
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -89,10 +79,6 @@ export const loginUser = async (req, res) => {
   }
 };
 
-/**
- * Get current user profile
- * GET /api/auth/me
- */
 export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-passwordHash');
@@ -110,10 +96,6 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-/**
- * Update user profile (bio, profile picture, or reference selfie)
- * PUT /api/auth/profile
- */
 export const updateUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -121,12 +103,10 @@ export const updateUserProfile = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Update bio if provided
     if (req.body.bio !== undefined) {
       user.bio = req.body.bio;
     }
 
-    // Update profile picture if uploaded
     if (req.files && req.files.profilePicture) {
       const file = req.files.profilePicture[0];
       const uploadResult = await uploadFile(file.buffer, file.originalname, file.mimetype);
@@ -149,10 +129,6 @@ export const updateUserProfile = async (req, res) => {
   }
 };
 
-/**
- * Get another user's public profile
- * GET /api/auth/users/:userId
- */
 export const getPublicProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId).select('name email bio profilePicture');

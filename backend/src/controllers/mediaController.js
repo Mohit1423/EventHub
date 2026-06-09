@@ -11,10 +11,6 @@ import { generateImageTags } from '../services/aiService.js';
 import { applyWatermark } from '../services/watermarkService.js';
 import { sendRealtimeNotification, broadcastToEvent } from '../services/socketService.js';
 
-/**
- * Upload single or bulk event media files
- * POST /api/media/upload
- */
 export const uploadMedia = async (req, res) => {
   const { eventId, isPublic, taggedUsers } = req.body;
 
@@ -28,7 +24,6 @@ export const uploadMedia = async (req, res) => {
       return res.status(404).json({ message: 'Event not found' });
     }
 
-    // Verify user is an admin or approved member of this event
     const membership = await EventMember.findOne({ eventId, userId: req.user._id });
     const isCreator = event.createdById.toString() === req.user._id.toString();
     
@@ -40,13 +35,12 @@ export const uploadMedia = async (req, res) => {
       return res.status(400).json({ message: 'No media files provided for upload' });
     }
 
-    // Parse tagged users if present
     let parsedTaggedUsers = [];
     if (taggedUsers) {
       try {
         parsedTaggedUsers = JSON.parse(taggedUsers);
       } catch (err) {
-        // Fallback if it's sent as a comma separated string
+       
         if (typeof taggedUsers === 'string') {
           parsedTaggedUsers = taggedUsers.split(',').map(s => s.trim()).filter(Boolean);
         }
@@ -55,22 +49,18 @@ export const uploadMedia = async (req, res) => {
 
     const uploadedMediaList = [];
 
-    // Process files sequentially to manage memory load on AI operations
     for (const file of req.files) {
       const isVideo = file.mimetype.startsWith('video');
 
-      // 1. Upload file binary
       const uploadResult = await uploadFile(file.buffer, file.originalname, file.mimetype);
 
-      // 2. Perform AI operations (Images only)
       let tags = [];
       const mediaId = new mongoose.Types.ObjectId();
 
       if (!isVideo) {
         try {
           console.log(`Analyzing AI features for tagging: ${file.originalname}`);
-          
-          // Auto-tagging
+
           tags = await generateImageTags(file.buffer, file.originalname);
           
           console.log(`AI Analysis complete. Tags: [${tags.join(', ')}]`);
@@ -81,7 +71,6 @@ export const uploadMedia = async (req, res) => {
         tags = ['video', 'media'];
       }
 
-      // 3. Save to MongoDB
       const media = await Media.create({
         _id: mediaId,
         eventId,
@@ -94,9 +83,8 @@ export const uploadMedia = async (req, res) => {
         taggedUsers: parsedTaggedUsers,
       });
 
-      // 4. Handle notifications for manually tagged users ONLY
       for (const taggedUserId of parsedTaggedUsers) {
-        if (taggedUserId.toString() === req.user._id.toString()) continue; // don't notify self
+        if (taggedUserId.toString() === req.user._id.toString()) continue;
 
         const notification = await Notification.create({
           userId: taggedUserId,
@@ -106,7 +94,6 @@ export const uploadMedia = async (req, res) => {
           relatedId: media._id,
         });
 
-        // Push real-time notification
         sendRealtimeNotification(taggedUserId.toString(), 'notification', {
           ...notification.toObject(),
           senderName: req.user.name,
@@ -117,7 +104,6 @@ export const uploadMedia = async (req, res) => {
       uploadedMediaList.push(media);
     }
 
-    // Broadcast media update in real-time
     broadcastToEvent(eventId, 'media_updated', { action: 'upload', count: uploadedMediaList.length });
 
     res.status(201).json({
@@ -131,22 +117,16 @@ export const uploadMedia = async (req, res) => {
   }
 };
 
-/**
- * Fetch media inside an Event (with access control)
- * GET /api/media/event/:eventId
- */
 export const getEventMedia = async (req, res) => {
   const { eventId } = req.params;
 
   try {
-    // req.event and req.isEventMember are populated by checkEventAccess/enforceEventAccess middlewares
+   
     const event = req.event;
     const isMember = req.isEventMember;
 
     let mediaQuery = { eventId };
 
-    // If the event is public, but user is NOT a member/admin, show only public photos.
-    // (If the event is private, enforceEventAccess middleware already blocked non-members).
     if (!isMember) {
       mediaQuery.isPublic = true;
     }
@@ -169,10 +149,6 @@ export const getEventMedia = async (req, res) => {
   }
 };
 
-/**
- * Downloads a media item and dynamically applies a watermark based on rules
- * GET /api/media/:mediaId/download
- */
 export const downloadMedia = async (req, res) => {
   const { mediaId } = req.params;
 
@@ -183,29 +159,22 @@ export const downloadMedia = async (req, res) => {
     }
 
     const event = media.eventId;
-    
-    // Evaluate access permissions for the event
+
     const isCreator = event.createdById.toString() === req.user._id.toString();
     const membership = await EventMember.findOne({ eventId: event._id, userId: req.user._id });
     const isMember = !!membership || isCreator;
     const role = isCreator ? 'ADMIN' : (membership ? membership.role : 'Viewer');
 
-    // Deny access if private event and not member
     if (!event.isPublic && !isMember) {
       return res.status(403).json({ message: 'Access Denied: Private Event' });
     }
 
-    // Deny access if private media and not member
     if (!media.isPublic && !isMember) {
       return res.status(403).json({ message: 'Access Denied: Private Media file' });
     }
 
-    // Fetch the original file buffer
     const fileBuffer = await getFileBuffer(media.filename, media.url);
 
-    // Apply watermark rules:
-    // Admin, Creator, and Uploader get clean un-watermarked files.
-    // Generic Club Members and Viewers get watermarked files.
     const isUploader = media.uploaderId.toString() === req.user._id.toString();
     const shouldWatermark = !isCreator && !isUploader && role !== 'ADMIN';
 
@@ -222,7 +191,6 @@ export const downloadMedia = async (req, res) => {
       return res.send(watermarkedBuffer);
     }
 
-    // Serve raw file if no watermarking is required (or if video)
     const mimeType = media.type === 'VIDEO' ? 'video/mp4' : 'image/jpeg';
     res.setHeader('Content-Type', mimeType);
     res.setHeader('Content-Disposition', `attachment; filename="${media.filename}"`);
@@ -233,10 +201,6 @@ export const downloadMedia = async (req, res) => {
   }
 };
 
-/**
- * Delete a media item
- * DELETE /api/media/:mediaId
- */
 export const deleteMedia = async (req, res) => {
   const { mediaId } = req.params;
 
@@ -248,7 +212,6 @@ export const deleteMedia = async (req, res) => {
 
     const event = media.eventId;
 
-    // Check permissions: User must be uploader OR event creator OR event admin member
     const isUploader = media.uploaderId.toString() === req.user._id.toString();
     const isCreator = event.createdById.toString() === req.user._id.toString();
     const membership = await EventMember.findOne({ eventId: event._id, userId: req.user._id });
@@ -258,24 +221,19 @@ export const deleteMedia = async (req, res) => {
       return res.status(403).json({ message: 'Forbidden: You do not have permission to delete this media.' });
     }
 
-    // Cascade deletes: Likes and Comments
     await Like.deleteMany({ mediaId });
     await Comment.deleteMany({ mediaId });
 
-    // Physical storage file delete
     try {
       await deleteFile(media.filename);
     } catch (err) {
       console.error(`Failed to delete storage file ${media.filename}:`, err.message);
     }
 
-    // Delete related notifications
     await Notification.deleteMany({ relatedId: mediaId });
 
-    // Delete media entry
     await Media.deleteOne({ _id: mediaId });
 
-    // Broadcast update in real-time
     broadcastToEvent(event._id, 'media_updated', { action: 'delete', mediaId });
 
     res.json({ message: 'Media successfully deleted' });
@@ -285,10 +243,6 @@ export const deleteMedia = async (req, res) => {
   }
 };
 
-/**
- * Get media details and associated eventId
- * GET /api/media/:mediaId/info
- */
 export const getMediaInfo = async (req, res) => {
   try {
     const media = await Media.findById(req.params.mediaId);

@@ -24,39 +24,32 @@ const EventDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Search/Filters inside the event
   const [mediaSearch, setMediaSearch] = useState('');
-  const [privacyFilter, setPrivacyFilter] = useState('ALL'); // 'ALL' | 'PUBLIC' | 'PRIVATE'
+  const [privacyFilter, setPrivacyFilter] = useState('ALL');
 
-  // Modal views
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
-  
-  // File Upload states
+
   const [uploadFiles, setUploadFiles] = useState([]);
   const [isUploadPublic, setIsUploadPublic] = useState(true);
-  const [taggedUsers, setTaggedUsers] = useState([]); // List of user IDs tagged in this upload
+  const [taggedUsers, setTaggedUsers] = useState([]);
   const [uploading, setUploading] = useState(false);
 
-  // Lightbox detail
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  // Edit Event state
   const [editName, setEditName] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [editCategory, setEditCategory] = useState('');
 
-  // User Profile Modal state
   const [profileUserId, setProfileUserId] = useState(null);
   const [profileUserData, setProfileUserData] = useState(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const [isMembersListOpen, setIsMembersListOpen] = useState(false);
 
-  // Ref to track currently selected photo to avoid stale closures in socket listener
   const selectedPhotoRef = useRef(selectedPhoto);
   useEffect(() => {
     selectedPhotoRef.current = selectedPhoto;
@@ -64,7 +57,7 @@ const EventDetails = () => {
 
   const fetchEventDetails = async () => {
     try {
-      // Fetch Event Metadata
+     
       const eventRes = await fetch(`http://localhost:5000/api/events/${eventId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -78,7 +71,6 @@ const EventDetails = () => {
       setEditDescription(eventData.description || '');
       setEditCategory(eventData.category || '');
 
-      // Fetch Event Media
       const mediaRes = await fetch(`http://localhost:5000/api/media/event/${eventId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -87,7 +79,6 @@ const EventDetails = () => {
         setMedia(mediaData);
       }
 
-      // Fetch Members list
       const membersRes = await fetch(`http://localhost:5000/api/events/${eventId}/members`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -96,7 +87,6 @@ const EventDetails = () => {
         setMembers(membersData);
       }
 
-      // If user is Admin, fetch pending join requests
       if (eventData.role === 'ADMIN') {
         const requestsRes = await fetch(`http://localhost:5000/api/events/${eventId}/join-requests`, {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -117,14 +107,11 @@ const EventDetails = () => {
     fetchEventDetails();
   }, [eventId, token]);
 
-  // Real-time synchronization using Socket.io
   useEffect(() => {
     if (!socket || !eventId) return;
 
-    // Join room
     socket.emit('join_event', eventId);
 
-    // Register room event hooks
     socket.on('media_updated', (data) => {
       console.log('Realtime: media list updated', data);
       fetchEventDetails();
@@ -155,7 +142,7 @@ const EventDetails = () => {
     });
 
     return () => {
-      // Leave room and cleanup handlers
+     
       socket.emit('leave_event', eventId);
       socket.off('media_updated');
       socket.off('requests_updated');
@@ -164,7 +151,6 @@ const EventDetails = () => {
     };
   }, [socket, eventId]);
 
-  // Open specific photo if mediaId query param is present
   useEffect(() => {
     if (media.length === 0) return;
     const mediaIdParam = searchParams.get('mediaId');
@@ -176,7 +162,6 @@ const EventDetails = () => {
     }
   }, [media, searchParams]);
 
-  // Load comments & likes for selected photo
   useEffect(() => {
     if (!selectedPhoto) return;
     const fetchSocials = async () => {
@@ -204,7 +189,6 @@ const EventDetails = () => {
     fetchSocials();
   }, [selectedPhoto]);
 
-  // Social updates
   const handleLike = async () => {
     if (!selectedPhoto) return;
     try {
@@ -267,7 +251,6 @@ const EventDetails = () => {
     .catch(err => console.error(err));
   };
 
-  // Join Requests
   const handleRequestApproval = async (requestId, approve) => {
     try {
       const res = await fetch(`http://localhost:5000/api/events/${eventId}/join-requests/${requestId}`, {
@@ -280,9 +263,9 @@ const EventDetails = () => {
       });
 
       if (res.ok) {
-        // Remove from pending UI list
+       
         setJoinRequests(prev => prev.filter(r => r._id !== requestId));
-        // Refresh members list
+       
         if (approve) {
           fetchEventDetails();
         }
@@ -292,7 +275,6 @@ const EventDetails = () => {
     }
   };
 
-  // Remove Event Member
   const handleRemoveMember = async (userId) => {
     if (!window.confirm('Are you sure you want to remove this user from the event?')) return;
     try {
@@ -308,7 +290,6 @@ const EventDetails = () => {
     }
   };
 
-  // Leave Event
   const handleLeaveEvent = async () => {
     if (!window.confirm('Are you sure you want to leave this event?')) return;
     try {
@@ -341,7 +322,6 @@ const EventDetails = () => {
     }
   };
 
-  // Lightbox navigation helpers
   const handleSelectPhoto = (photo) => {
     setSelectedPhoto(photo);
     setSearchParams({ mediaId: photo._id });
@@ -352,7 +332,6 @@ const EventDetails = () => {
     setSearchParams({});
   };
 
-  // Delete Media
   const handleDeleteMedia = async (mediaId) => {
     if (!window.confirm('Are you sure you want to delete this media? This will permanently delete the photo, all its comments, likes, and files.')) return;
     try {
@@ -372,7 +351,6 @@ const EventDetails = () => {
     }
   };
 
-  // Update Event Settings
   const handleUpdateEventSettings = async (updatedFields) => {
     try {
       const res = await fetch(`http://localhost:5000/api/events/${eventId}`, {
@@ -417,7 +395,6 @@ const EventDetails = () => {
     }
   };
 
-  // Fetch Public Profile details on request
   useEffect(() => {
     if (!profileUserId) {
       setProfileUserData(null);
@@ -444,7 +421,6 @@ const EventDetails = () => {
     fetchUserProfile();
   }, [profileUserId, token]);
 
-  // File Upload
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setUploadFiles(prev => [...prev, ...files]);
@@ -476,11 +452,11 @@ const EventDetails = () => {
       });
 
       if (res.ok) {
-        // Reset upload queue
+       
         setUploadFiles([]);
         setTaggedUsers([]);
         setIsUploadOpen(false);
-        // Refresh event data to show uploaded media
+       
         fetchEventDetails();
       } else {
         const data = await res.json();
@@ -502,7 +478,6 @@ const EventDetails = () => {
     }
   };
 
-  // Filter Media
   const filteredMedia = media.filter(m => {
     const matchesSearch = m.filename.toLowerCase().includes(mediaSearch.toLowerCase()) ||
                           m.tags.some(tag => tag.toLowerCase().includes(mediaSearch.toLowerCase())) ||
@@ -551,8 +526,7 @@ const EventDetails = () => {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-6 mt-8">
-        
-        {/* Navigation back link */}
+
         <button 
           onClick={() => navigate('/')}
           className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-300 font-semibold mb-6 transition-colors"
@@ -560,7 +534,6 @@ const EventDetails = () => {
           <ArrowLeft className="w-4 h-4" /> Back to Directory
         </button>
 
-        {/* Hero Event Banner Detail Header */}
         <div className="glass-panel p-6 rounded-3xl border-slate-900 mb-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
           <div className="absolute -top-12 -right-12 w-48 h-48 bg-rose-500/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -656,7 +629,6 @@ const EventDetails = () => {
           </div>
         )}
 
-        {/* Media Grid Section Toolbar */}
         <div className="glass-panel p-4 rounded-2xl mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border-slate-900">
           <div className="relative w-full md:max-w-sm">
             <Search className="absolute left-3 top-3 text-slate-500 w-4 h-4" />
@@ -683,7 +655,6 @@ const EventDetails = () => {
           </div>
         </div>
 
-        {/* Media Grid Display */}
         {filteredMedia.length === 0 ? (
           <div className="glass-panel text-center py-24 rounded-3xl border-slate-900">
             <FileImage className="w-12 h-12 text-slate-800 mx-auto mb-3" />
@@ -707,20 +678,17 @@ const EventDetails = () => {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       preload="metadata"
                     />
-                    
-                    {/* Video Play Overlay Badge */}
+
                     <div className="absolute inset-0 flex items-center justify-center bg-slate-950/30 group-hover:bg-slate-950/10 transition-colors">
                       <div className="w-10 h-10 rounded-full bg-slate-950/80 backdrop-blur-sm border border-slate-800 flex items-center justify-center text-rose-500 shadow-lg shadow-black/40">
                         <FileVideo className="w-5 h-5 fill-rose-500/20" />
                       </div>
                     </div>
 
-                    {/* Public/Private Badge overlay */}
                     <div className="absolute top-2 right-2 p-1 rounded-md bg-slate-950/80 border border-slate-850 z-10">
                       {photo.isPublic ? <Unlock className="w-3 h-3 text-slate-300" /> : <Lock className="w-3 h-3 text-amber-500" />}
                     </div>
 
-                    {/* Bottom overlay on hover */}
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-3 z-10">
                       <div className="text-[10px] font-bold text-slate-100 truncate">{photo.filename || 'media_file'}</div>
                       {photo.tags && photo.tags.length > 0 && (
@@ -736,12 +704,10 @@ const EventDetails = () => {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
 
-                    {/* Public/Private Badge overlay */}
                     <div className="absolute top-2 right-2 p-1 rounded-md bg-slate-950/80 border border-slate-850 z-10">
                       {photo.isPublic ? <Unlock className="w-3 h-3 text-slate-300" /> : <Lock className="w-3 h-3 text-amber-500" />}
                     </div>
 
-                    {/* Bottom overlay on hover */}
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-3 z-10">
                       <div className="text-[10px] font-bold text-slate-100 truncate">{photo.filename || 'media_file'}</div>
                       {photo.tags && photo.tags.length > 0 && (
@@ -757,7 +723,6 @@ const EventDetails = () => {
 
       </main>
 
-      {/* Upload Media Modal */}
       {isUploadOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" onClick={() => setIsUploadOpen(false)}>
           <div className="w-full max-w-xl glass-panel p-6 rounded-2xl relative shadow-2xl animate-fade-in border-slate-800 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
@@ -765,8 +730,7 @@ const EventDetails = () => {
             <p className="text-slate-400 text-xs mb-5">Upload event photography and footage. AI automatically generates descriptive tags.</p>
 
             <form onSubmit={handleUploadSubmit} className="space-y-4">
-              
-              {/* Drag and Drop Zone */}
+
               <div className="p-8 border border-dashed border-slate-800 hover:border-rose-500/40 hover:bg-rose-500/5 rounded-2xl text-center cursor-pointer transition-all relative">
                 <input 
                   type="file" 
@@ -780,7 +744,6 @@ const EventDetails = () => {
                 <span className="text-[10px] text-slate-500 block mt-1">Supports JPG, PNG, WEBP, MP4 up to 30MB</span>
               </div>
 
-              {/* Upload Files list */}
               {uploadFiles.length > 0 && (
                 <div className="space-y-2 max-h-[200px] overflow-y-auto p-1.5 bg-slate-950/50 border border-slate-900 rounded-xl">
                   {uploadFiles.map((file, idx) => {
@@ -789,7 +752,7 @@ const EventDetails = () => {
                     return (
                       <div key={idx} className="flex items-center justify-between text-xs p-2 rounded-lg bg-slate-900 border border-slate-800/80 gap-3">
                         <div className="flex items-center gap-3 min-w-0">
-                          {/* Mini thumbnail preview */}
+                          
                           <div className="w-10 h-10 rounded-lg bg-slate-950 border border-slate-800 overflow-hidden flex-shrink-0 flex items-center justify-center relative">
                             {isVideo ? (
                               <video 
@@ -828,7 +791,6 @@ const EventDetails = () => {
                 </div>
               )}
 
-              {/* Privacy Setting */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Upload Privacy</label>
                 <div className="grid grid-cols-2 gap-3">
@@ -853,7 +815,6 @@ const EventDetails = () => {
                 </div>
               </div>
 
-              {/* Tag Friends/Users Manual Selection */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center justify-between">
                   <span>Tag Event Members (Manual)</span>
@@ -876,7 +837,6 @@ const EventDetails = () => {
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-900">
                 <button 
                   type="button"
@@ -904,7 +864,6 @@ const EventDetails = () => {
         </div>
       )}
 
-      {/* Admin Panel Modal (Members & Request Approvals) */}
       {isAdminPanelOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" onClick={() => setIsAdminPanelOpen(false)}>
           <div className="w-full max-w-2xl glass-panel p-6 rounded-2xl relative shadow-2xl animate-fade-in border-slate-800 max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
@@ -919,7 +878,6 @@ const EventDetails = () => {
             </h2>
             <p className="text-slate-400 text-xs mb-6">Manage event settings, pending join requests and event membership.</p>
 
-            {/* Event Settings Panel */}
             <form onSubmit={async (e) => {
               e.preventDefault();
               await handleUpdateEventSettings({ name: editName, description: editDescription, category: editCategory });
@@ -973,8 +931,7 @@ const EventDetails = () => {
             </form>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
-              {/* Left Column: Pending Join Requests */}
+
               <div className="space-y-4">
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
                   <span>Pending Requests ({joinRequests.length})</span>
@@ -1017,7 +974,6 @@ const EventDetails = () => {
                 )}
               </div>
 
-              {/* Right Column: Manage Members */}
               <div className="space-y-4">
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                   Approved Members ({members.length})
@@ -1058,7 +1014,6 @@ const EventDetails = () => {
           </div>
         </div>
 
-        {/* Danger Zone */}
         <div className="border-t border-rose-950/45 pt-6 mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-rose-950/5 p-4 rounded-xl border border-rose-900/10">
           <div className="min-w-0">
             <h4 className="text-xs font-bold text-rose-450 uppercase tracking-wider">Danger Zone</h4>
@@ -1077,12 +1032,10 @@ const EventDetails = () => {
     </div>
       )}
 
-      {/* Media Viewer Lightbox */}
       {selectedPhoto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md" onClick={() => handleCloseLightbox()}>
           <div className="w-full max-w-4xl glass-panel rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl border-slate-900 h-[80vh] max-h-[650px]" onClick={(e) => e.stopPropagation()}>
-            
-            {/* Image side */}
+
             <div className="flex-1 bg-black flex items-center justify-center relative p-2 h-1/2 md:h-full">
               {selectedPhoto.type === 'VIDEO' ? (
                 <video 
@@ -1099,11 +1052,9 @@ const EventDetails = () => {
               )}
             </div>
 
-            {/* Social drawer details side */}
             <div className="w-full md:w-80 border-t md:border-t-0 md:border-l border-slate-900 p-6 flex flex-col justify-between h-1/2 md:h-full bg-slate-950/40 backdrop-blur-sm">
               <div className="overflow-y-auto pr-1 flex-1 flex flex-col">
-                
-                {/* Meta header */}
+
                 <div className="border-b border-slate-900 pb-4 mb-4 relative">
                   <button 
                     onClick={() => handleCloseLightbox()} 
@@ -1135,7 +1086,6 @@ const EventDetails = () => {
                     </div>
                   </div>
 
-                  {/* Manual tags list */}
                   {selectedPhoto.taggedUsers && selectedPhoto.taggedUsers.length > 0 && (
                     <div className="mt-3">
                       <div className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">Tagged Users:</div>
@@ -1149,7 +1099,6 @@ const EventDetails = () => {
                     </div>
                   )}
 
-                  {/* AI classification tags */}
                   {selectedPhoto.tags && selectedPhoto.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-3">
                       {selectedPhoto.tags.map(tag => (
@@ -1161,7 +1110,6 @@ const EventDetails = () => {
                   )}
                 </div>
 
-                {/* Comments List */}
                 <div className="flex-1 space-y-3 mb-4">
                   <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
                     <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
@@ -1176,7 +1124,7 @@ const EventDetails = () => {
                     <div className="space-y-2.5 max-h-[160px] overflow-y-auto pr-1">
                       {comments.map(c => (
                         <div key={c._id} className="flex gap-2.5 text-xs bg-slate-900/40 p-2.5 rounded-xl border border-slate-900/50 items-start">
-                          {/* Profile Picture */}
+                          
                           <div 
                             className="w-7 h-7 rounded-full bg-slate-800 overflow-hidden flex items-center justify-center text-[10px] text-slate-400 font-bold border border-slate-700 cursor-pointer hover:border-rose-500 transition-colors flex-shrink-0"
                             onClick={() => setProfileUserId(c.userId?._id)}
@@ -1191,8 +1139,7 @@ const EventDetails = () => {
                               c.userId?.name?.charAt(0)
                             )}
                           </div>
-                          
-                          {/* Content */}
+
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-0.5">
                               <span 
@@ -1215,7 +1162,6 @@ const EventDetails = () => {
 
               </div>
 
-              {/* Inputs, likes & download */}
               <div className="border-t border-slate-900 pt-4 mt-auto space-y-4">
                 
                 <div className="flex items-center justify-between">
@@ -1272,7 +1218,6 @@ const EventDetails = () => {
         </div>
       )}
 
-      {/* Event Members List Modal */}
       {isMembersListOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" onClick={() => setIsMembersListOpen(false)}>
           <div className="w-full max-w-md glass-panel p-6 rounded-2xl relative shadow-2xl animate-fade-in border-slate-800 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
@@ -1331,7 +1276,7 @@ const EventDetails = () => {
               </div>
             ) : profileUserData ? (
               <div className="space-y-4 mt-2">
-                {/* Profile Picture */}
+                
                 <div className="w-24 h-24 rounded-full bg-slate-800 border-2 border-rose-500/50 mx-auto overflow-hidden flex items-center justify-center text-3xl text-slate-400 font-bold shadow-lg">
                   {profileUserData.profilePicture ? (
                     <img 

@@ -11,17 +11,14 @@ import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.use(protect); // All interaction routes require JWT verification
+router.use(protect);
 
-// Like endpoints
 router.post('/like', toggleLike);
 router.get('/like/:mediaId', getLikeStatus);
 
-// Comment endpoints
 router.post('/comment', addComment);
 router.get('/comments/:mediaId', getComments);
 
-// Notification endpoints
 router.get('/notifications', getNotifications);
 router.put('/notifications/read', markNotificationsAsRead);
 

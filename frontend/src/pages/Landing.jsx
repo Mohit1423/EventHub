@@ -7,26 +7,23 @@ const Landing = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect to dashboard if already logged in
   useEffect(() => {
     if (!loading && user) {
       navigate('/dashboard');
     }
   }, [user, loading, navigate]);
 
-  if (loading) return null; // Or a sleek loader
+  if (loading) return null;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans selection:bg-rose-500/30">
-      
-      {/* Dynamic Background Elements */}
+
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-rose-600/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-indigo-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-50" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay"></div>
       </div>
 
-      {/* Header / Nav */}
       <nav className="relative z-10 border-b border-slate-800/50 glass-panel">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -48,7 +45,6 @@ const Landing = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <main className="relative z-10 pt-20 pb-32 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 mb-8 animate-fade-in opacity-0" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
@@ -78,9 +74,8 @@ const Landing = () => {
           </div>
         </div>
 
-        {/* Floating Previews / Decorative UI */}
         <div className="mt-24 max-w-6xl mx-auto relative h-[400px] hidden md:block animate-fade-in opacity-0" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
-          {/* Main Mockup */}
+          
           <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[800px] h-[500px] rounded-3xl border border-slate-800/60 bg-slate-900/50 backdrop-blur-md shadow-2xl overflow-hidden glass-panel z-20 flex flex-col">
             <div className="h-12 border-b border-slate-800/50 flex items-center px-4 gap-2 bg-slate-950/50">
               <div className="w-3 h-3 rounded-full bg-slate-800" />
@@ -108,8 +103,7 @@ const Landing = () => {
                </div>
             </div>
           </div>
-          
-          {/* Floating Elements */}
+
           <div className="absolute top-12 left-[10%] z-30 p-4 rounded-2xl glass-panel border border-slate-700 shadow-xl flex items-center gap-4 hover:-translate-y-2 transition-transform duration-300">
             <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center">
               <Users className="w-6 h-6 text-indigo-400" />
@@ -132,7 +126,6 @@ const Landing = () => {
         </div>
       </main>
 
-      {/* Features Section */}
       <section className="relative z-10 py-32 bg-slate-950 border-t border-slate-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
@@ -160,7 +153,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* How it works Section */}
       <section className="relative z-10 py-32 bg-slate-900/50 border-t border-slate-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
@@ -169,7 +161,7 @@ const Landing = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-12 relative">
-            {/* Connecting Line */}
+            
             <div className="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-transparent via-rose-500/50 to-transparent"></div>
             
             <StepCard number="1" title="Create an Event" desc="Give your event a name and generate a secure sharing link." />
@@ -179,7 +171,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
       <section className="relative z-10 py-32 bg-slate-950 border-t border-slate-900 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-600/5 rounded-full blur-3xl pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-6">
@@ -195,7 +186,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Final CTA */}
       <section className="relative z-10 py-32 bg-slate-900 border-t border-slate-800">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-5xl font-black tracking-tight mb-8">Ready to Capture <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-indigo-500">Your Next Event?</span></h2>
@@ -207,7 +197,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="relative z-10 bg-slate-950 border-t border-slate-900 pt-20 pb-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-12 mb-16">

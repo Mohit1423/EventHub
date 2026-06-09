@@ -7,7 +7,6 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [loading, setLoading] = useState(true);
 
-  // Sync token changes to localStorage and load user profile if token exists
   useEffect(() => {
     const fetchProfile = async () => {
       if (!token) {
@@ -28,7 +27,7 @@ export const AuthProvider = ({ children }) => {
           const data = await response.json();
           setUser(data);
         } else {
-          // Token expired or invalid
+         
           logout();
         }
       } catch (err) {
@@ -100,7 +99,7 @@ export const AuthProvider = ({ children }) => {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
-      body: formData, // Sending multipart/form-data directly
+      body: formData,
     });
 
     const data = await response.json();

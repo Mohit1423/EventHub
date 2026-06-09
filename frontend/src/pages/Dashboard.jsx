@@ -12,10 +12,9 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
-  const [sortBy, setSortBy] = useState('date'); // 'date' | 'name' | 'category'
-  const [sortOrder, setSortOrder] = useState('desc'); // 'asc' | 'desc'
-  
-  // Create Event Modal State
+  const [sortBy, setSortBy] = useState('date');
+  const [sortOrder, setSortOrder] = useState('desc');
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -65,7 +64,7 @@ const Dashboard = () => {
       });
 
       if (response.ok) {
-        // Reset states
+       
         setName('');
         setDescription('');
         setDate('');
@@ -93,7 +92,7 @@ const Dashboard = () => {
         },
       });
       if (response.ok) {
-        // Re-fetch events list to update status button
+       
         fetchEvents();
       } else {
         const data = await response.json();
@@ -113,7 +112,6 @@ const Dashboard = () => {
     }
   };
 
-  // Filter & Sort Logic
   const filteredEvents = events
     .filter(event => {
       const matchesSearch = event.name.toLowerCase().includes(search.toLowerCase()) || 
@@ -143,8 +141,7 @@ const Dashboard = () => {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-6 mt-8">
-        
-        {/* Dashboard Header */}
+
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight text-slate-100">
@@ -163,11 +160,9 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {/* Toolbar: Search, Filters, Sorters */}
         <div className="glass-panel p-4 rounded-2xl mb-8 flex flex-col gap-4 border-slate-900">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
-            
-            {/* Search Input */}
+
             <div className="relative w-full lg:max-w-md">
               <Search className="absolute left-3.5 top-3.5 text-slate-500 w-4.5 h-4.5" />
               <input
@@ -179,7 +174,6 @@ const Dashboard = () => {
               />
             </div>
 
-            {/* Sorter triggers */}
             <div className="flex items-center gap-2 self-start lg:self-auto text-xs font-semibold text-slate-400">
               <span className="uppercase tracking-wider mr-1">Sort By:</span>
               <button 
@@ -204,7 +198,6 @@ const Dashboard = () => {
 
           </div>
 
-          {/* Category Filters bar */}
           <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-900">
             {categories.map((cat) => (
               <button
@@ -218,7 +211,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Loading Spinner */}
         {loading ? (
           <div className="flex justify-center items-center py-20">
             <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-rose-500"></div>
@@ -232,7 +224,7 @@ const Dashboard = () => {
             </p>
           </div>
         ) : (
-          /* Event Grid */
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEvents.map((event) => {
               const eventDateString = new Date(event.date).toLocaleDateString('en-US', {
@@ -242,12 +234,11 @@ const Dashboard = () => {
               });
               return (
                 <div key={event._id} className="glass-card flex flex-col justify-between p-6 rounded-2xl relative group border-slate-900 overflow-hidden">
-                  
-                  {/* Subtle hover gradient */}
+
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
                   <div className="relative">
-                    {/* Category Header */}
+                    
                     <div className="flex items-center justify-between mb-4">
                       <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
                         <Tag className="w-3.5 h-3.5 text-rose-500" />
@@ -255,7 +246,6 @@ const Dashboard = () => {
                       </span>
                     </div>
 
-                    {/* Title & Description */}
                     <h3 className="text-lg font-bold text-slate-100 group-hover:text-rose-500 transition-colors line-clamp-1">
                       {event.name}
                     </h3>
@@ -263,7 +253,6 @@ const Dashboard = () => {
                       {event.description || 'No description provided.'}
                     </p>
 
-                    {/* Metadata Footer */}
                     <div className="mt-5 space-y-2 border-t border-slate-900 pt-4 text-xs text-slate-500">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-slate-600" />
@@ -276,7 +265,6 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  {/* Join/Open Buttons */}
                   <div className="mt-6 relative">
                     <button
                       onClick={() => navigate(`/events/${event._id}`)}
@@ -299,7 +287,6 @@ const Dashboard = () => {
 
       </main>
 
-      {/* Create Event Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}>
           <div className="w-full max-w-md glass-panel p-6 rounded-2xl relative shadow-2xl animate-fade-in border-slate-800" onClick={(e) => e.stopPropagation()}>

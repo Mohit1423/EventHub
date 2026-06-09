@@ -10,7 +10,6 @@ const Notifications = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
 
-  // Mark all as read when user opens the notifications page
   useEffect(() => {
     markAsRead();
   }, []);
@@ -61,8 +60,7 @@ const Notifications = () => {
       <Navbar />
 
       <main className="max-w-3xl mx-auto px-6 mt-8">
-        
-        {/* Header */}
+
         <div className="mb-8">
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-100 flex items-center gap-2">
             <Bell className="text-rose-500 w-8 h-8" />
@@ -73,7 +71,6 @@ const Notifications = () => {
           </p>
         </div>
 
-        {/* Notifications list */}
         {notifications.length === 0 ? (
           <div className="glass-panel text-center py-20 rounded-3xl border-slate-900">
             <Bell className="w-12 h-12 text-slate-800 mx-auto mb-3" />
@@ -103,13 +100,11 @@ const Notifications = () => {
                   className={`glass-card p-4 rounded-xl flex items-center justify-between border cursor-pointer group hover:bg-slate-900/60 transition-all ${bg} ${isUnread ? 'border-rose-500/20 bg-slate-900/80 shadow-md' : 'border-slate-900 bg-slate-900/20'}`}
                 >
                   <div className="flex items-center gap-4 min-w-0">
-                    
-                    {/* Status Icon Wrapper */}
+
                     <div className="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center flex-shrink-0">
                       {icon}
                     </div>
 
-                    {/* Sender Profile Pic */}
                     <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 overflow-hidden flex items-center justify-center flex-shrink-0">
                       {sender?.profilePicture ? (
                         <img 
@@ -122,7 +117,6 @@ const Notifications = () => {
                       )}
                     </div>
 
-                    {/* Content Details */}
                     <div className="min-w-0">
                       <p className={`text-sm leading-normal truncate ${isUnread ? 'text-slate-100 font-semibold' : 'text-slate-300 font-medium'}`}>
                         {notification.message}

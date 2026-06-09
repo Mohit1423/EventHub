@@ -8,10 +8,6 @@ import Notification from '../models/Notification.js';
 import { deleteFile } from '../services/storageService.js';
 import { broadcastToEvent } from '../services/socketService.js';
 
-/**
- * Create a new event
- * POST /api/events
- */
 export const createEvent = async (req, res) => {
   const { name, description, date, category } = req.body;
 
@@ -25,11 +21,10 @@ export const createEvent = async (req, res) => {
       description,
       date,
       category,
-      isPublic: true, // Force all events to be public
+      isPublic: true,
       createdById: req.user._id,
     });
 
-    // Automatically join the creator as ADMIN of the event
     await EventMember.create({
       eventId: event._id,
       userId: req.user._id,
@@ -43,26 +38,18 @@ export const createEvent = async (req, res) => {
   }
 };
 
-/**
- * Fetch all events (public and private)
- * For private events, indicates if locked (user not a member)
- * GET /api/events
- */
 export const getEvents = async (req, res) => {
   try {
     const events = await Event.find().sort({ date: -1 }).populate('createdById', 'name email');
-    
-    // Check membership for each event to flag locked/access status
+
     const mappedEvents = await Promise.all(
       events.map(async (event) => {
         const isCreator = event.createdById._id.toString() === req.user._id.toString();
-        
-        // Check if member
+
         const member = await EventMember.findOne({ eventId: event._id, userId: req.user._id });
         const isMember = !!member;
         const role = member ? member.role : (isCreator ? 'ADMIN' : null);
 
-        // Check if there is an active join request
         const request = await JoinRequest.findOne({ eventId: event._id, userId: req.user._id });
         const requestStatus = request ? request.status : null;
 
@@ -91,21 +78,14 @@ export const getEvents = async (req, res) => {
   }
 };
 
-/**
- * Get single event metadata
- * GET /api/events/:eventId
- * Access protected by checkEventAccess middleware
- */
 export const getEventById = async (req, res) => {
   try {
-    // Check if there is an active join request
+   
     const request = await JoinRequest.findOne({ eventId: req.event._id, userId: req.user._id });
     const requestStatus = request ? request.status : null;
 
-    // Populate creator user details
     const populatedEvent = await req.event.populate('createdById', 'name email profilePicture');
 
-    // req.event is populated by checkEventAccess middleware
     res.json({
       ...populatedEvent.toObject(),
       isMember: req.isEventMember,
@@ -119,11 +99,6 @@ export const getEventById = async (req, res) => {
   }
 };
 
-/**
- * Update event metadata (Admin only)
- * PUT /api/events/:eventId
- * Access protected by checkEventAccess and requireEventAdmin middlewares
- */
 export const updateEvent = async (req, res) => {
   const { category, name, description } = req.body;
   try {
@@ -132,11 +107,10 @@ export const updateEvent = async (req, res) => {
     if (category !== undefined) event.category = category;
     if (name !== undefined) event.name = name;
     if (description !== undefined) event.description = description;
-    event.isPublic = true; // Force isPublic to remain true
+    event.isPublic = true;
 
     await event.save();
 
-    // Broadcast update in real-time
     broadcastToEvent(event._id, 'event_updated');
 
     res.json(event);
@@ -146,10 +120,6 @@ export const updateEvent = async (req, res) => {
   }
 };
 
-/**
- * Delete an event permanently (Admin/Creator only)
- * DELETE /api/events/:eventId
- */
 export const deleteEvent = async (req, res) => {
   const { eventId } = req.params;
 
@@ -159,7 +129,6 @@ export const deleteEvent = async (req, res) => {
       return res.status(404).json({ message: 'Event not found' });
     }
 
-    // Verify user is the event creator or an ADMIN member
     const isCreator = event.createdById.toString() === req.user._id.toString();
     const membership = await EventMember.findOne({ eventId, userId: req.user._id });
     const isAdmin = isCreator || (membership && membership.role === 'ADMIN');
@@ -170,40 +139,31 @@ export const deleteEvent = async (req, res) => {
 
     console.log(`Cascade deleting event ${eventId} ("${event.name}")...`);
 
-    // 1. Fetch all media associated with the event
     const eventMedia = await Media.find({ eventId });
     for (const media of eventMedia) {
-      // Delete comments & likes
+     
       await Like.deleteMany({ mediaId: media._id });
       await Comment.deleteMany({ mediaId: media._id });
 
-      // Delete notification records linked to this media
       await Notification.deleteMany({ relatedId: media._id });
 
-      // Delete files from storage
       try {
         await deleteFile(media.filename);
       } catch (fileErr) {
         console.error(`Failed to delete physical file ${media.filename}:`, fileErr.message);
       }
 
-      // Delete media document
       await Media.deleteOne({ _id: media._id });
     }
 
-    // 2. Delete all event members
     await EventMember.deleteMany({ eventId });
 
-    // 3. Delete all pending/approved join requests
     await JoinRequest.deleteMany({ eventId });
 
-    // 4. Delete notifications directly pointing to the event
     await Notification.deleteMany({ relatedId: eventId });
 
-    // 5. Delete the event itself
     await Event.deleteOne({ _id: eventId });
 
-    // 6. Broadcast event deletion in real-time
     broadcastToEvent(eventId, 'media_updated', { action: 'delete_bulk' });
     broadcastToEvent(eventId, 'event_updated', { action: 'delete', eventId });
 

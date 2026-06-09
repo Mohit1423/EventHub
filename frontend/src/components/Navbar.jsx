@@ -49,7 +49,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="sticky top-0 z-40 glass-panel bg-slate-950/80 border-b border-slate-900 px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
+        
         <Link to="/dashboard" className="flex items-center gap-2 group">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-105 transition-all">
             <Camera className="text-white w-5 h-5" />
@@ -59,7 +59,6 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Center navigation */}
         <div className="hidden md:flex items-center gap-8 font-medium">
           <Link 
             to="/dashboard" 
@@ -69,9 +68,8 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Right side controls */}
         <div className="flex items-center gap-5">
-          {/* Notifications link */}
+          
           <Link 
             to="/notifications" 
             className={`relative p-2 rounded-xl border border-slate-800 bg-slate-900/40 text-slate-400 hover:text-slate-200 hover:border-slate-700 transition-all ${isActive('/notifications') ? 'text-rose-500 border-rose-500/30' : ''}`}
@@ -84,7 +82,6 @@ const Navbar = () => {
             )}
           </Link>
 
-          {/* User profile dropdown button */}
           <button 
             onClick={() => setIsProfileOpen(true)}
             className="flex items-center gap-2.5 p-1 pr-3 rounded-full border border-slate-800 bg-slate-900/40 text-slate-300 hover:border-slate-700 hover:bg-slate-900/80 transition-all text-left"
@@ -102,7 +99,6 @@ const Navbar = () => {
             </div>
           </button>
 
-          {/* Logout */}
           <button 
             onClick={logout}
             className="p-2 rounded-xl border border-slate-800/80 hover:border-rose-500/20 text-slate-400 hover:text-rose-500 hover:bg-rose-500/5 transition-all"
@@ -113,7 +109,6 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Profile Management Modal */}
       {isProfileOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" onClick={() => setIsProfileOpen(false)}>
           <div className="w-full max-w-md glass-panel p-6 rounded-2xl relative shadow-2xl animate-fade-in border-slate-800" onClick={(e) => e.stopPropagation()}>
@@ -132,7 +127,7 @@ const Navbar = () => {
             )}
 
             <form onSubmit={handleUpdateProfile} className="space-y-4">
-              {/* Profile Bio */}
+              
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Bio</label>
                 <textarea 
@@ -144,7 +139,6 @@ const Navbar = () => {
                 />
               </div>
 
-              {/* Profile Picture */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Profile Picture</label>
                 <div className="flex items-center gap-3">
@@ -166,7 +160,6 @@ const Navbar = () => {
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="flex items-center justify-end gap-3 pt-3">
                 <button 
                   type="button"

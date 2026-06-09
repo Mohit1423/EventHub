@@ -4,10 +4,6 @@ import Media from '../models/Media.js';
 import Notification from '../models/Notification.js';
 import { sendRealtimeNotification } from '../services/socketService.js';
 
-/**
- * Toggle Like/Unlike on a media item
- * POST /api/interactions/like
- */
 export const toggleLike = async (req, res) => {
   const { mediaId } = req.body;
 
@@ -25,14 +21,13 @@ export const toggleLike = async (req, res) => {
     let liked = false;
 
     if (existingLike) {
-      // Unlike
+     
       await Like.deleteOne({ _id: existingLike._id });
     } else {
-      // Like
+     
       await Like.create({ mediaId, userId: req.user._id });
       liked = true;
 
-      // Notify the uploader (if not self)
       if (media.uploaderId.toString() !== req.user._id.toString()) {
         const notification = await Notification.create({
           userId: media.uploaderId,
@@ -42,7 +37,6 @@ export const toggleLike = async (req, res) => {
           relatedId: media._id,
         });
 
-        // Broadcast real-time
         sendRealtimeNotification(media.uploaderId, 'notification', {
           ...notification.toObject(),
           senderName: req.user.name,
@@ -51,7 +45,6 @@ export const toggleLike = async (req, res) => {
       }
     }
 
-    // Return the updated like count and liked status
     const likeCount = await Like.countDocuments({ mediaId });
     res.json({ liked, likeCount });
   } catch (error) {
@@ -60,10 +53,6 @@ export const toggleLike = async (req, res) => {
   }
 };
 
-/**
- * Check if current user liked a media item and get total count
- * GET /api/interactions/like/:mediaId
- */
 export const getLikeStatus = async (req, res) => {
   const { mediaId } = req.params;
 
@@ -76,10 +65,6 @@ export const getLikeStatus = async (req, res) => {
   }
 };
 
-/**
- * Add a comment to a media item
- * POST /api/interactions/comment
- */
 export const addComment = async (req, res) => {
   const { mediaId, content } = req.body;
 
@@ -99,10 +84,8 @@ export const addComment = async (req, res) => {
       content,
     });
 
-    // Populate user info for frontend display
     const populatedComment = await comment.populate('userId', 'name profilePicture');
 
-    // Notify the uploader (if not self)
     if (media.uploaderId.toString() !== req.user._id.toString()) {
       const notification = await Notification.create({
         userId: media.uploaderId,
@@ -126,10 +109,6 @@ export const addComment = async (req, res) => {
   }
 };
 
-/**
- * Get all comments for a media item
- * GET /api/interactions/comments/:mediaId
- */
 export const getComments = async (req, res) => {
   const { mediaId } = req.params;
 
@@ -145,10 +124,6 @@ export const getComments = async (req, res) => {
   }
 };
 
-/**
- * Fetch all notifications for the authenticated user
- * GET /api/interactions/notifications
- */
 export const getNotifications = async (req, res) => {
   try {
     const notifications = await Notification.find({ userId: req.user._id })
@@ -162,10 +137,6 @@ export const getNotifications = async (req, res) => {
   }
 };
 
-/**
- * Mark all user notifications as read
- * PUT /api/interactions/notifications/read
- */
 export const markNotificationsAsRead = async (req, res) => {
   try {
     await Notification.updateMany(

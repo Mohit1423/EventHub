@@ -37,12 +37,10 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-slate-950">
       <div className="w-full max-w-md glass-panel p-8 rounded-3xl relative shadow-2xl border-slate-900">
-        
-        {/* Glow effect */}
+
         <div className="absolute -top-10 -left-10 w-40 h-40 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Brand Logo Header */}
         <div className="flex flex-col items-center mb-6">
           <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center shadow-[0_0_40px_rgba(244,63,94,0.3)] mb-4 hover:scale-110 transition-transform duration-300">
             <UserPlus className="w-8 h-8 text-white ml-1" />
@@ -62,7 +60,6 @@ const Register = () => {
           </div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
@@ -141,7 +138,6 @@ const Register = () => {
           </button>
         </form>
 
-        {/* Footer prompts */}
         <div className="text-center mt-6 text-xs text-slate-500">
           Already have an account?{' '}
           <Link to="/login" className="text-rose-400 hover:text-rose-300 font-bold ml-0.5">

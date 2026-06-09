@@ -23,7 +23,6 @@ const joinRequestSchema = new mongoose.Schema(
   }
 );
 
-// Compounding index to make sure a user can only have one active request per event
 joinRequestSchema.index({ eventId: 1, userId: 1 }, { unique: true });
 
 const JoinRequest = mongoose.model('JoinRequest', joinRequestSchema);

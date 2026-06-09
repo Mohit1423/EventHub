@@ -9,24 +9,18 @@ import Media from '../models/Media.js';
 import { deleteFile } from '../services/storageService.js';
 import { sendRealtimeNotification, broadcastToEvent } from '../services/socketService.js';
 
-/**
- * Send a request to join an Event
- * POST /api/events/:eventId/join-request
- */
 export const sendJoinRequest = async (req, res) => {
   const { eventId } = req.params;
 
   try {
-    // checkEventAccess middleware already ran, so req.event is populated
+   
     const event = req.event;
 
-    // Check if already a member
     const existingMember = await EventMember.findOne({ eventId, userId: req.user._id });
     if (existingMember) {
       return res.status(400).json({ message: 'You are already a member of this event' });
     }
 
-    // Check if there is an existing pending/approved request
     const existingRequest = await JoinRequest.findOne({ eventId, userId: req.user._id });
     if (existingRequest) {
       if (existingRequest.status === 'PENDING') {
@@ -34,7 +28,7 @@ export const sendJoinRequest = async (req, res) => {
       } else if (existingRequest.status === 'APPROVED') {
         return res.status(400).json({ message: 'Your join request was already approved' });
       }
-      // If DENIED, we let them request again by resetting status to PENDING
+     
       existingRequest.status = 'PENDING';
       await existingRequest.save();
       return res.status(200).json({ message: 'Join request re-submitted', request: existingRequest });
@@ -46,7 +40,6 @@ export const sendJoinRequest = async (req, res) => {
       status: 'PENDING',
     });
 
-    // Notify Event Creator/Admin
     const notification = await Notification.create({
       userId: event.createdById,
       senderId: req.user._id,
@@ -55,14 +48,12 @@ export const sendJoinRequest = async (req, res) => {
       relatedId: event._id,
     });
 
-    // Send real-time notification
     sendRealtimeNotification(event.createdById, 'notification', {
       ...notification.toObject(),
       senderName: req.user.name,
       senderPicture: req.user.profilePicture,
     });
 
-    // Broadcast join request list update in real-time
     broadcastToEvent(eventId, 'requests_updated');
 
     res.status(201).json({ message: 'Join request sent successfully', request });
@@ -72,11 +63,6 @@ export const sendJoinRequest = async (req, res) => {
   }
 };
 
-/**
- * List all pending join requests for an event
- * GET /api/events/:eventId/join-requests
- * Restricted to Event Admin (requireEventAdmin middleware)
- */
 export const getJoinRequests = async (req, res) => {
   const { eventId } = req.params;
 
@@ -92,14 +78,9 @@ export const getJoinRequests = async (req, res) => {
   }
 };
 
-/**
- * Approve or Deny a join request
- * PUT /api/events/:eventId/join-requests/:requestId
- * Restricted to Event Admin
- */
 export const handleJoinRequest = async (req, res) => {
   const { eventId, requestId } = req.params;
-  const { status } = req.body; // 'APPROVED' or 'DENIED'
+  const { status } = req.body;
 
   try {
     if (!['APPROVED', 'DENIED'].includes(status)) {
@@ -121,14 +102,13 @@ export const handleJoinRequest = async (req, res) => {
     const event = req.event;
 
     if (status === 'APPROVED') {
-      // Create EventMember
+     
       await EventMember.create({
         eventId,
         userId: request.userId._id,
         role: 'MEMBER',
       });
 
-      // Send approval notification
       const notification = await Notification.create({
         userId: request.userId._id,
         senderId: req.user._id,
@@ -143,7 +123,7 @@ export const handleJoinRequest = async (req, res) => {
         senderPicture: req.user.profilePicture,
       });
     } else {
-      // Send denial notification
+     
       const notification = await Notification.create({
         userId: request.userId._id,
         senderId: req.user._id,
@@ -159,7 +139,6 @@ export const handleJoinRequest = async (req, res) => {
       });
     }
 
-    // Broadcast request approval/denial and membership changes in real-time
     broadcastToEvent(eventId, 'requests_updated');
     broadcastToEvent(eventId, 'membership_updated', { userId: request.userId._id, status });
 
@@ -170,17 +149,13 @@ export const handleJoinRequest = async (req, res) => {
   }
 };
 
-/**
- * List all members of an Event
- * GET /api/events/:eventId/members
- */
 export const getEventMembers = async (req, res) => {
   const { eventId } = req.params;
 
   try {
     const members = await EventMember.find({ eventId })
       .populate('userId', 'name email bio profilePicture')
-      .sort({ role: 1, createdAt: 1 }); // Admins first
+      .sort({ role: 1, createdAt: 1 });
 
     res.json(members);
   } catch (error) {
@@ -189,16 +164,11 @@ export const getEventMembers = async (req, res) => {
   }
 };
 
-/**
- * Remove a member from the event
- * DELETE /api/events/:eventId/members/:memberUserId
- * Restricted to Event Admin
- */
 export const removeMember = async (req, res) => {
   const { eventId, memberUserId } = req.params;
 
   try {
-    // Creator cannot be removed
+   
     const event = req.event;
     if (event.createdById.toString() === memberUserId) {
       return res.status(400).json({ message: 'Cannot remove the event creator/owner.' });
@@ -210,32 +180,26 @@ export const removeMember = async (req, res) => {
     }
 
     await EventMember.deleteOne({ _id: member._id });
-    
-    // Clean up active Join Requests if any, so they can re-request later
+
     await JoinRequest.deleteOne({ eventId, userId: memberUserId });
 
-    // Cascade delete: Fetch all media uploaded by the removed user in this event
     const userMedia = await Media.find({ eventId, uploaderId: memberUserId });
     for (const media of userMedia) {
-      // Delete database comments and likes for this media
+     
       await Like.deleteMany({ mediaId: media._id });
       await Comment.deleteMany({ mediaId: media._id });
 
-      // Physical storage file delete
       try {
         await deleteFile(media.filename);
       } catch (err) {
         console.error(`Failed to delete user media file ${media.filename}:`, err.message);
       }
 
-      // Delete related notifications
       await Notification.deleteMany({ relatedId: media._id });
 
-      // Delete media entry
       await Media.deleteOne({ _id: media._id });
     }
 
-    // Broadcast membership and media updates in real-time
     broadcastToEvent(eventId, 'membership_updated', { userId: memberUserId, status: 'REMOVED' });
     broadcastToEvent(eventId, 'media_updated', { action: 'delete_bulk' });
 
@@ -246,11 +210,6 @@ export const removeMember = async (req, res) => {
   }
 };
 
-/**
- * Leave the event
- * DELETE /api/events/:eventId/leave
- * Accessible to event members
- */
 export const leaveEvent = async (req, res) => {
   const { eventId } = req.params;
 
@@ -268,24 +227,20 @@ export const leaveEvent = async (req, res) => {
     await EventMember.deleteOne({ _id: member._id });
     await JoinRequest.deleteOne({ eventId, userId: req.user._id });
 
-    // Cascade delete: Fetch all media uploaded by the leaving user in this event
     const userMedia = await Media.find({ eventId, uploaderId: req.user._id });
     for (const media of userMedia) {
-      // Delete database comments and likes for this media
+     
       await Like.deleteMany({ mediaId: media._id });
       await Comment.deleteMany({ mediaId: media._id });
 
-      // Physical storage file delete
       try {
         await deleteFile(media.filename);
       } catch (err) {
         console.error(`Failed to delete user media file ${media.filename}:`, err.message);
       }
 
-      // Delete related notifications
       await Notification.deleteMany({ relatedId: media._id });
 
-      // Delete face references from Azure FaceList
       if (media.faceIds && media.faceIds.length > 0) {
         try {
           await deleteMediaFaces(media.faceIds);
@@ -294,11 +249,9 @@ export const leaveEvent = async (req, res) => {
         }
       }
 
-      // Delete media entry
       await Media.deleteOne({ _id: media._id });
     }
 
-    // Broadcast membership and media updates in real-time
     broadcastToEvent(eventId, 'membership_updated', { userId: req.user._id, status: 'LEFT' });
     broadcastToEvent(eventId, 'media_updated', { action: 'delete_bulk' });
 
