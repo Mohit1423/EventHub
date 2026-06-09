@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
 
       try {
         localStorage.setItem('token', token);
-        const response = await fetch('http://localhost:5000/api/auth/me', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const login = async (email, password) => {
-    const response = await fetch('http://localhost:5000/api/auth/login', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, password) => {
-    const response = await fetch('http://localhost:5000/api/auth/register', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateProfile = async (formData) => {
-    const response = await fetch('http://localhost:5000/api/auth/profile', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,

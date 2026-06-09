@@ -88,7 +88,7 @@ const Navbar = () => {
           >
             <div className="w-8 h-8 rounded-full bg-slate-800 overflow-hidden flex items-center justify-center border border-slate-700">
               {user?.profilePicture ? (
-                <img src={user.profilePicture.startsWith('/') ? `http://localhost:5000${user.profilePicture}` : user.profilePicture} alt="" className="w-full h-full object-cover" />
+                <img src={user.profilePicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${user.profilePicture}` : user.profilePicture} alt="" className="w-full h-full object-cover" />
               ) : (
                 <User className="w-4 h-4 text-rose-500" />
               )}
@@ -146,7 +146,7 @@ const Navbar = () => {
                     {profilePicture ? (
                       <img src={URL.createObjectURL(profilePicture)} alt="" className="w-full h-full object-cover" />
                     ) : user?.profilePicture ? (
-                      <img src={user.profilePicture.startsWith('/') ? `http://localhost:5000${user.profilePicture}` : user.profilePicture} alt="" className="w-full h-full object-cover" />
+                      <img src={user.profilePicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${user.profilePicture}` : user.profilePicture} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <User className="text-slate-500 w-5 h-5" />
                     )}

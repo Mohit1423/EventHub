@@ -28,7 +28,7 @@ const Dashboard = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/events', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -54,7 +54,7 @@ const Dashboard = () => {
     setCreating(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/events', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const Dashboard = () => {
 
   const handleRequestAccess = async (eventId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/events/${eventId}/join-request`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${eventId}/join-request`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

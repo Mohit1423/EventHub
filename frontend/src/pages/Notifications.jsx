@@ -38,7 +38,7 @@ const Notifications = () => {
 
     if (type === 'LIKE' || type === 'COMMENT' || type === 'TAG') {
       try {
-        const res = await fetch(`http://localhost:5000/api/media/${relatedId}/info`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${relatedId}/info`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -108,7 +108,7 @@ const Notifications = () => {
                     <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 overflow-hidden flex items-center justify-center flex-shrink-0">
                       {sender?.profilePicture ? (
                         <img 
-                          src={sender.profilePicture.startsWith('/') ? `http://localhost:5000${sender.profilePicture}` : sender.profilePicture} 
+                          src={sender.profilePicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${sender.profilePicture}` : sender.profilePicture} 
                           alt="" 
                           className="w-full h-full object-cover" 
                         />

@@ -20,7 +20,7 @@ export const NotificationProvider = ({ children }) => {
       }
 
       try {
-        const res = await fetch('http://localhost:5000/api/interactions/notifications', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/interactions/notifications`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -47,7 +47,7 @@ export const NotificationProvider = ({ children }) => {
       return;
     }
 
-    const socketUrl = 'http://localhost:5000';
+    const socketUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}`;
     const newSocket = io(socketUrl);
     setSocket(newSocket);
 
@@ -88,7 +88,7 @@ export const NotificationProvider = ({ children }) => {
     if (!token) return;
 
     try {
-      const res = await fetch('http://localhost:5000/api/interactions/notifications/read', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/interactions/notifications/read`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -112,7 +112,7 @@ export const NotificationProvider = ({ children }) => {
         <div className="fixed bottom-5 right-5 z-50 animate-bounce glass-panel p-4 rounded-xl flex items-center gap-3 border-rose-500/50 shadow-2xl max-w-sm">
           <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 overflow-hidden flex-shrink-0 flex items-center justify-center">
             {toast.senderPicture ? (
-              <img src={toast.senderPicture.startsWith('/') ? `http://localhost:5000${toast.senderPicture}` : toast.senderPicture} alt="" className="w-full h-full object-cover" />
+              <img src={toast.senderPicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${toast.senderPicture}` : toast.senderPicture} alt="" className="w-full h-full object-cover" />
             ) : (
               <span className="text-rose-500 font-bold text-lg">{toast.senderName.charAt(0)}</span>
             )}

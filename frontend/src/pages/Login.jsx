@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ShieldAlert, Lock, Mail, LogIn } from 'lucide-react';
+import { ShieldAlert, Lock, Mail, LogIn, ArrowLeft } from 'lucide-react';
 
 const Login = () => {
   const { login } = useAuth();
@@ -28,8 +28,12 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-950">
-      <div className="w-full max-w-md glass-panel p-8 rounded-3xl relative shadow-2xl border-slate-900">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-950 relative">
+      <Link to="/" className="absolute top-8 left-8 md:top-12 md:left-12 text-slate-400 hover:text-white flex items-center gap-2 transition-colors group">
+        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+        <span className="font-semibold hidden sm:inline">Back to Home</span>
+      </Link>
+      <div className="w-full max-w-md glass-panel p-8 rounded-3xl relative shadow-2xl border-slate-900 z-10">
 
         <div className="absolute -top-10 -left-10 w-40 h-40 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />

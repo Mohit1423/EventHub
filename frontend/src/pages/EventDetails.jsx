@@ -58,7 +58,7 @@ const EventDetails = () => {
   const fetchEventDetails = async () => {
     try {
      
-      const eventRes = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+      const eventRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${eventId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!eventRes.ok) {
@@ -71,7 +71,7 @@ const EventDetails = () => {
       setEditDescription(eventData.description || '');
       setEditCategory(eventData.category || '');
 
-      const mediaRes = await fetch(`http://localhost:5000/api/media/event/${eventId}`, {
+      const mediaRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/event/${eventId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (mediaRes.ok) {
@@ -79,7 +79,7 @@ const EventDetails = () => {
         setMedia(mediaData);
       }
 
-      const membersRes = await fetch(`http://localhost:5000/api/events/${eventId}/members`, {
+      const membersRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${eventId}/members`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (membersRes.ok) {
@@ -88,7 +88,7 @@ const EventDetails = () => {
       }
 
       if (eventData.role === 'ADMIN') {
-        const requestsRes = await fetch(`http://localhost:5000/api/events/${eventId}/join-requests`, {
+        const requestsRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${eventId}/join-requests`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (requestsRes.ok) {
@@ -166,7 +166,7 @@ const EventDetails = () => {
     if (!selectedPhoto) return;
     const fetchSocials = async () => {
       try {
-        const likeRes = await fetch(`http://localhost:5000/api/interactions/like/${selectedPhoto._id}`, {
+        const likeRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/interactions/like/${selectedPhoto._id}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (likeRes.ok) {
@@ -175,7 +175,7 @@ const EventDetails = () => {
           setLikeCount(data.likeCount);
         }
 
-        const commentRes = await fetch(`http://localhost:5000/api/interactions/comments/${selectedPhoto._id}`, {
+        const commentRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/interactions/comments/${selectedPhoto._id}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (commentRes.ok) {
@@ -192,7 +192,7 @@ const EventDetails = () => {
   const handleLike = async () => {
     if (!selectedPhoto) return;
     try {
-      const res = await fetch('http://localhost:5000/api/interactions/like', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/interactions/like`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -215,7 +215,7 @@ const EventDetails = () => {
     if (!newComment.trim() || !selectedPhoto) return;
 
     try {
-      const res = await fetch('http://localhost:5000/api/interactions/comment', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/interactions/comment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -234,7 +234,7 @@ const EventDetails = () => {
   };
 
   const handleDownload = (photo) => {
-    fetch(`http://localhost:5000/api/media/${photo._id}/download`, {
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${photo._id}/download`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(res => res.blob())
@@ -253,7 +253,7 @@ const EventDetails = () => {
 
   const handleRequestApproval = async (requestId, approve) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/join-requests/${requestId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${eventId}/join-requests/${requestId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -278,7 +278,7 @@ const EventDetails = () => {
   const handleRemoveMember = async (userId) => {
     if (!window.confirm('Are you sure you want to remove this user from the event?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/members/${userId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${eventId}/members/${userId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -293,7 +293,7 @@ const EventDetails = () => {
   const handleLeaveEvent = async () => {
     if (!window.confirm('Are you sure you want to leave this event?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/leave`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${eventId}/leave`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -307,7 +307,7 @@ const EventDetails = () => {
 
   const handleJoinRequest = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/join-request`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${eventId}/join-request`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -335,7 +335,7 @@ const EventDetails = () => {
   const handleDeleteMedia = async (mediaId) => {
     if (!window.confirm('Are you sure you want to delete this media? This will permanently delete the photo, all its comments, likes, and files.')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/media/${mediaId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${mediaId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -353,7 +353,7 @@ const EventDetails = () => {
 
   const handleUpdateEventSettings = async (updatedFields) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${eventId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -377,7 +377,7 @@ const EventDetails = () => {
     }
     
     try {
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${eventId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -404,7 +404,7 @@ const EventDetails = () => {
     const fetchUserProfile = async () => {
       setProfileLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/api/auth/users/${profileUserId}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/users/${profileUserId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -445,7 +445,7 @@ const EventDetails = () => {
     });
 
     try {
-      const res = await fetch('http://localhost:5000/api/media/upload', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/upload`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -674,7 +674,7 @@ const EventDetails = () => {
                 {photo.type === 'VIDEO' ? (
                   <div className="w-full h-full relative overflow-hidden bg-slate-900">
                     <video 
-                      src={photo.url.startsWith('/') ? `http://localhost:5000${photo.url}` : photo.url} 
+                      src={photo.url.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${photo.url}` : photo.url} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       preload="metadata"
                     />
@@ -699,7 +699,7 @@ const EventDetails = () => {
                 ) : (
                   <>
                     <img 
-                      src={photo.url.startsWith('/') ? `http://localhost:5000${photo.url}` : photo.url} 
+                      src={photo.url.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${photo.url}` : photo.url} 
                       alt={photo.filename} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -989,7 +989,7 @@ const EventDetails = () => {
                         >
                           <div className="w-6 h-6 rounded-full bg-slate-800 overflow-hidden flex items-center justify-center text-[10px] text-slate-400 font-bold border border-slate-700 flex-shrink-0 group-hover/member:border-rose-500 transition-colors">
                             {member.userId.profilePicture ? (
-                              <img src={member.userId.profilePicture.startsWith('/') ? `http://localhost:5000${member.userId.profilePicture}` : member.userId.profilePicture} alt="" className="w-full h-full object-cover" />
+                              <img src={member.userId.profilePicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${member.userId.profilePicture}` : member.userId.profilePicture} alt="" className="w-full h-full object-cover" />
                             ) : member.userId.name.charAt(0)}
                           </div>
                           <div className="min-w-0">
@@ -1039,13 +1039,13 @@ const EventDetails = () => {
             <div className="flex-1 bg-black flex items-center justify-center relative p-2 h-1/2 md:h-full">
               {selectedPhoto.type === 'VIDEO' ? (
                 <video 
-                  src={selectedPhoto.url.startsWith('/') ? `http://localhost:5000${selectedPhoto.url}` : selectedPhoto.url} 
+                  src={selectedPhoto.url.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${selectedPhoto.url}` : selectedPhoto.url} 
                   controls 
                   className="w-full h-full object-contain"
                 />
               ) : (
                 <img 
-                  src={selectedPhoto.url.startsWith('/') ? `http://localhost:5000${selectedPhoto.url}` : selectedPhoto.url} 
+                  src={selectedPhoto.url.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${selectedPhoto.url}` : selectedPhoto.url} 
                   alt="" 
                   className="w-full h-full object-contain"
                 />
@@ -1070,7 +1070,7 @@ const EventDetails = () => {
                     >
                       {selectedPhoto.uploaderId?.profilePicture ? (
                         <img 
-                          src={selectedPhoto.uploaderId.profilePicture.startsWith('/') ? `http://localhost:5000${selectedPhoto.uploaderId.profilePicture}` : selectedPhoto.uploaderId.profilePicture} 
+                          src={selectedPhoto.uploaderId.profilePicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${selectedPhoto.uploaderId.profilePicture}` : selectedPhoto.uploaderId.profilePicture} 
                           alt="" 
                           className="w-full h-full object-cover" 
                         />
@@ -1131,7 +1131,7 @@ const EventDetails = () => {
                           >
                             {c.userId?.profilePicture ? (
                               <img 
-                                src={c.userId.profilePicture.startsWith('/') ? `http://localhost:5000${c.userId.profilePicture}` : c.userId.profilePicture} 
+                                src={c.userId.profilePicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${c.userId.profilePicture}` : c.userId.profilePicture} 
                                 alt="" 
                                 className="w-full h-full object-cover" 
                               />
@@ -1245,7 +1245,7 @@ const EventDetails = () => {
                   <div className="min-w-0 flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-slate-800 overflow-hidden flex items-center justify-center text-xs text-slate-400 font-bold border border-slate-700 flex-shrink-0 group-hover/mem:border-rose-500 transition-colors">
                       {member.userId.profilePicture ? (
-                        <img src={member.userId.profilePicture.startsWith('/') ? `http://localhost:5000${member.userId.profilePicture}` : member.userId.profilePicture} alt="" className="w-full h-full object-cover" />
+                        <img src={member.userId.profilePicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${member.userId.profilePicture}` : member.userId.profilePicture} alt="" className="w-full h-full object-cover" />
                       ) : member.userId.name.charAt(0)}
                     </div>
                     <div className="min-w-0">
@@ -1280,7 +1280,7 @@ const EventDetails = () => {
                 <div className="w-24 h-24 rounded-full bg-slate-800 border-2 border-rose-500/50 mx-auto overflow-hidden flex items-center justify-center text-3xl text-slate-400 font-bold shadow-lg">
                   {profileUserData.profilePicture ? (
                     <img 
-                      src={profileUserData.profilePicture.startsWith('/') ? `http://localhost:5000${profileUserData.profilePicture}` : profileUserData.profilePicture} 
+                      src={profileUserData.profilePicture.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${profileUserData.profilePicture}` : profileUserData.profilePicture} 
                       alt="" 
                       className="w-full h-full object-cover" 
                     />
