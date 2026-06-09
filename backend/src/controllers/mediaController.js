@@ -176,7 +176,7 @@ export const downloadMedia = async (req, res) => {
     const fileBuffer = await getFileBuffer(media.filename, media.url);
 
     const isUploader = media.uploaderId.toString() === req.user._id.toString();
-    const shouldWatermark = !isCreator && !isUploader && role !== 'ADMIN';
+    const shouldWatermark = true;
 
     if (shouldWatermark && media.type === 'IMAGE') {
       console.log(`Applying watermark for user ${req.user.name} on ${media.filename}...`);
