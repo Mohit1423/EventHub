@@ -51,4 +51,53 @@ Initially, we planned to implement automated face recognition to instantly tag u
 
 ## 📦 Deployment Prep
 
-The codebase has been fully stripped of development comments and hardcoded URLs have been replaced with dynamic `VITE_API_URL` variables, making it completely ready for production deployment on platforms like Vercel (Frontend) and Render (Backend).
+The codebase has been stripped from hardcoded URLs which have been replaced with dynamic `VITE_API_URL` variables, making it completely ready for production deployment on platforms like Vercel (Frontend) and Render (Backend).
+
+## 💻 How to Run Locally
+
+### Prerequisites
+- Node.js (v16+)
+- MongoDB (Local or Atlas URI)
+- Microsoft Azure Account (For Storage & Cognitive Services)
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Mohit1423/EventHub.git
+cd EventHub
+```
+
+### 2. Backend Setup
+```bash
+cd backend
+npm install
+```
+Create a `.env` file in the `backend` directory using `.env.example` as a template:
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+STORAGE_PROVIDER=azure
+AZURE_STORAGE_CONNECTION_STRING=your_azure_connection_string
+AZURE_STORAGE_CONTAINER_NAME=event-media
+AZURE_FACE_KEY=your_azure_face_key
+AZURE_FACE_ENDPOINT=your_azure_face_endpoint
+AZURE_VISION_KEY=your_azure_vision_key
+AZURE_VISION_ENDPOINT=your_azure_vision_endpoint
+```
+Start the backend server:
+```bash
+npm run dev
+```
+
+### 3. Frontend Setup
+Open a new terminal window:
+```bash
+cd frontend
+npm install
+```
+Start the Vite development server:
+```bash
+npm run dev
+```
+
+The app will now be running on `http://localhost:5173`!
